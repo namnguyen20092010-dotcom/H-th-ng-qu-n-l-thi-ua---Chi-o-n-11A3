@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="google-site-verification" content="CoZ9mWGknaozXdwTXXdxd630eKrf8gF0dNjQvXnsqsU" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chi đoàn 11A3 — Quản lý thi đua</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--tx:#0d2a4a;--mu:#5b7391;--pr:#0a84ff;--pr2:#5ac8fa;--ac:#38bdf8;--ok:#0891b2;--pos:#119a4f;--neg:#e5383b;
+--glass:rgba(255,255,255,.46);--glass2:rgba(255,255,255,.72);--bd:rgba(20,70,130,.13);--edge:rgba(255,255,255,.8);--sh:0 8px 32px rgba(30,100,180,.14);
+--bgimg:linear-gradient(160deg,#e3f3ff 0%,#cbe8ff 45%,#e9f6ff 100%);--bg:#e3f3ff;--hi:rgba(255,255,255,.9);--ease:cubic-bezier(.32,.72,0,1);--spring:cubic-bezier(.34,1.56,.64,1)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--tx:#e8f2ff;--mu:#9fb6d3;--pr:#3b9dff;--pr2:#64d2ff;--ac:#38bdf8;--ok:#22b8d6;--pos:#4ade80;--neg:#ff6b6b;--glass:rgba(24,40,70,.5);--glass2:rgba(40,62,100,.7);--bd:rgba(255,255,255,.14);--edge:rgba(255,255,255,.2);--sh:0 8px 32px rgba(0,0,0,.35);--bgimg:linear-gradient(160deg,#0b1830 0%,#0e2748 50%,#0a1a33 100%);--bg:#0b1830;--hi:rgba(255,255,255,.12)}}
+:root[data-theme="dark"]{--tx:#e8f2ff;--mu:#9fb6d3;--pr:#3b9dff;--pr2:#64d2ff;--ac:#38bdf8;--ok:#22b8d6;--pos:#4ade80;--neg:#ff6b6b;--glass:rgba(24,40,70,.5);--glass2:rgba(40,62,100,.7);--bd:rgba(255,255,255,.14);--edge:rgba(255,255,255,.2);--sh:0 8px 32px rgba(0,0,0,.35);--bgimg:linear-gradient(160deg,#0b1830 0%,#0e2748 50%,#0a1a33 100%);--bg:#0b1830;--hi:rgba(255,255,255,.12)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bgimg) fixed;color:var(--tx);font:14px/1.45 "SF Pro Text","SF Pro Display","SF Pro",-apple-system,BlinkMacSystemFont,"Inter",system-ui,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.006em;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 8%,rgba(90,200,250,.55),transparent 38%),radial-gradient(circle at 88% 18%,rgba(10,132,255,.32),transparent 40%),radial-gradient(circle at 72% 92%,rgba(170,215,255,.65),transparent 42%),radial-gradient(circle at 8% 88%,rgba(120,230,255,.45),transparent 36%)}
+.card,.stats>div,nav{background:linear-gradient(135deg,var(--glass2),var(--glass));-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--edge);box-shadow:var(--sh),inset 0 1px 0 var(--hi),inset 0 -1px 0 rgba(255,255,255,.12)}
+header{margin:12px 12px 10px;padding:14px 18px;border-radius:26px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(10,132,255,.88),rgba(90,200,250,.8));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.55);box-shadow:0 10px 30px rgba(10,132,255,.3),inset 0 1px 0 rgba(255,255,255,.6)}
+header h1{margin:0;font-size:17px;letter-spacing:.2px}
+.chip{background:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:4px 12px;font-size:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+nav{display:flex;gap:4px;padding:5px;margin:0 12px 12px;overflow-x:auto;position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:5;border-radius:999px;scrollbar-width:none}
+nav button{border:0;background:transparent;color:var(--tx);padding:9px 16px;border-radius:999px;white-space:nowrap;cursor:pointer;font:inherit;font-weight:500;position:relative;z-index:1;transition:color .2s var(--ease),background .15s}
+nav button:not(.on):hover{background:rgba(255,255,255,.5)}
+nav button.on{color:#fff}
+nav .ind{position:absolute;top:5px;bottom:5px;left:0;width:0;border-radius:999px;z-index:0;background:linear-gradient(180deg,#5cb3ff,#0a84ff);box-shadow:0 4px 14px rgba(10,132,255,.38),inset 0 1px 0 rgba(255,255,255,.55);transition:transform .36s var(--spring),width .28s var(--ease)}
+main{padding:0 12px 28px;max-width:1100px;margin:auto}
+.card{border-radius:24px;padding:16px;margin-bottom:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,input{font:inherit;padding:8px 11px;border:1px solid var(--edge);border-radius:14px;background:var(--glass2);color:var(--tx);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 1px 3px rgba(20,70,130,.1)}
+select:focus,input:focus{outline:2px solid rgba(10,132,255,.5);outline-offset:1px}
+button.b{font:inherit;font-weight:500;padding:8px 15px;border-radius:999px;border:1px solid rgba(255,255,255,.6);color:#fff;cursor:pointer;background:linear-gradient(180deg,#5cb3ff,#0a84ff);box-shadow:0 4px 14px rgba(10,132,255,.32),inset 0 1px 0 rgba(255,255,255,.55);transition:.2s}
+button.b.g{background:linear-gradient(135deg,var(--glass2),var(--glass));color:var(--tx);box-shadow:var(--sh),inset 0 1px 0 var(--hi);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+button.b:hover{transform:translateY(-1px);filter:brightness(1.05)}button.b:active{transform:scale(.97)}
+button:disabled,input:disabled,select:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.wrap{overflow-x:auto;scrollbar-width:thin}table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 9px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+th{position:sticky;top:0;background:rgba(235,247,255,.72);color:var(--mu);font-weight:600;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+:root[data-theme="dark"] th{background:rgba(20,36,66,.75)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) th{background:rgba(20,36,66,.75)}}
+td:nth-child(2),th:nth-child(2){text-align:left}td:first-child,th:first-child{text-align:center}
+tr.cl{cursor:pointer;transition:.15s}tr.cl:hover,tbody tr:hover td{background:rgba(10,132,255,.07)}
+.p{color:var(--pos)}.n{color:var(--neg)}.mu{color:var(--mu)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.stats>div{border-radius:20px;padding:12px 14px}.stats b{display:block;font-size:22px;font-weight:650}
+.cell{width:58px;text-align:right;padding:4px 6px;border-radius:10px}.hide{display:none}
+.badge{background:linear-gradient(180deg,#5cb3ff,#0a84ff);color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){.card,.stats>div,nav{background:var(--glass2)}}
+@media(max-width:560px){header{padding:12px 14px;border-radius:22px}.card{border-radius:20px;padding:13px}}
+html{scroll-behavior:smooth}
+button.b{transition:transform .28s var(--spring),box-shadow .2s var(--ease),filter .2s,background .2s}
+button.b:hover{transform:translateY(-2px) scale(1.02)}button.b:active{transform:scale(.95);transition-duration:.07s}
+select,input{transition:box-shadow .2s var(--ease),outline-color .2s,background .2s}
+.card,.stats>div{transition:transform .28s var(--ease),box-shadow .28s var(--ease)}
+.stats>div:hover{transform:translateY(-3px)}
+@keyframes rise{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+#app.in>*{animation:rise .34s var(--ease) both}
+#app.in>*:nth-child(2){animation-delay:.03s}#app.in>*:nth-child(3){animation-delay:.06s}#app.in>*:nth-child(4){animation-delay:.09s}#app.in>*:nth-child(5){animation-delay:.12s}#app.in>*:nth-child(n+6){animation-delay:.15s}
+tr.cl,tbody tr td{transition:background .15s var(--ease)}
+.badge{transition:transform .2s var(--spring)}tr:hover .badge{transform:scale(1.12)}
+
+.panel{position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.66),rgba(255,255,255,.2));-webkit-backdrop-filter:blur(36px) saturate(210%) brightness(1.05);backdrop-filter:blur(36px) saturate(210%) brightness(1.05);border:1px solid rgba(255,255,255,.95);box-shadow:var(--sh),0 0 0 1px rgba(10,132,255,.06),inset 0 1.5px 1px var(--hi),inset 0 -14px 28px rgba(10,132,255,.09),inset 0 0 22px rgba(255,255,255,.28)}
+.panel::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,color-mix(in srgb,var(--hi) 62%,transparent) 0%,transparent 26%,transparent 70%,color-mix(in srgb,var(--hi) 28%,transparent) 100%)}
+.panel::after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:34%;pointer-events:none;border-radius:50% 50% 0 0;background:radial-gradient(60% 100% at 50% 100%,color-mix(in srgb,var(--hi) 55%,transparent),transparent)}
+.panel>*{position:relative;z-index:1}
+.panel select,.panel input:not([type=checkbox]):not([type=radio]){border-radius:999px;border:1px solid rgba(255,255,255,.95);background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.42));box-shadow:0 3px 10px rgba(20,80,160,.12),inset 0 1.5px 0 #fff,inset 0 -7px 12px rgba(10,132,255,.07)}
+.panel button.b.g{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.4));border:1px solid rgba(255,255,255,.95);box-shadow:0 4px 12px rgba(20,80,160,.14),inset 0 1.5px 0 #fff,inset 0 -8px 14px rgba(10,132,255,.1)}
+.panel button.b:not(.g){box-shadow:0 6px 18px rgba(10,132,255,.38),inset 0 1.5px 0 rgba(255,255,255,.7),inset 0 -8px 14px rgba(255,255,255,.28)}
+.panel label{cursor:pointer}
+footer#foot{max-width:1100px;margin:6px 12px 20px;padding:16px 20px;border-radius:24px;text-align:center;font-size:12.5px;line-height:1.7;color:var(--mu);position:relative;overflow:hidden;background:linear-gradient(135deg,var(--glass2),var(--glass));-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--edge);box-shadow:var(--sh),inset 0 1px 0 var(--hi),inset 0 -10px 22px rgba(10,132,255,.07)}
+footer#foot b{color:var(--tx);font-weight:600}footer#foot a{color:var(--pr);text-decoration:none}footer#foot a:hover{text-decoration:underline}
+footer#foot .note{margin-top:6px;padding-top:6px;border-top:1px solid var(--bd)}
+@media(min-width:1124px){footer#foot{margin-left:auto;margin-right:auto}}
+.ic{width:1.15em;height:1.15em;vertical-align:-.22em;margin-right:.32em;flex:none;overflow:visible}
+button .ic:only-child,.badge .ic{margin:0}
+.ic.tile{width:1.65em;height:1.65em;vertical-align:-.5em;filter:drop-shadow(0 2px 3px rgba(10,60,140,.32))}
+.ic.medal{width:2em;height:2em;margin:0;vertical-align:-.5em;filter:drop-shadow(0 2px 2px rgba(60,40,0,.3))}
+nav button{display:inline-flex;align-items:center;gap:8px}nav button .ic.tile{width:30px;height:30px;margin:0;vertical-align:0}
+nav button.on .ic.tile{filter:drop-shadow(0 2px 4px rgba(0,40,120,.45))}
+h1.brand{display:flex;align-items:center;gap:10px}h1.brand .ic.tile{width:34px;height:34px;margin:0;vertical-align:0;filter:drop-shadow(0 3px 5px rgba(0,50,130,.4))}
+.chip .ic{width:1.05em;height:1.05em;vertical-align:-.18em}
+button.b .ic.tile{width:1.5em;height:1.5em;margin-right:.35em;vertical-align:-.42em}
+body.lock{overflow:hidden}
+#landing{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:20px;background:linear-gradient(160deg,#dff2ff 0%,#a8d8ff 48%,#e7f6ff 100%)}
+#landing.out{animation:lgOut .62s var(--ios) both;pointer-events:none}
+.lg-art{position:absolute;inset:0;width:100%;height:100%}
+.lg-sway{transform-box:fill-box;transform-origin:50% 100%;animation:sway 7s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes lgfloat{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-16px) rotate(var(--r,0deg))}}
+.lg-f{position:absolute;width:78px;height:78px;border-radius:26px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(255,255,255,.2));-webkit-backdrop-filter:blur(18px) saturate(200%);backdrop-filter:blur(18px) saturate(200%);border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 40px rgba(10,90,200,.25),inset 0 2px 1px #fff,inset 0 -10px 18px rgba(10,132,255,.1);animation:lgfloat 6s ease-in-out infinite}
+.lg-f .ic.tile{width:46px;height:46px;margin:0;vertical-align:0}
+.lg-f1{left:9%;top:18%;--r:-8deg}.lg-f2{right:10%;top:14%;--r:9deg;animation-delay:-2s;width:68px;height:68px}.lg-f3{left:12%;bottom:14%;--r:7deg;animation-delay:-3.5s;width:66px;height:66px}.lg-f4{right:12%;bottom:12%;--r:-6deg;animation-delay:-1s}
+.lg-card{position:relative;z-index:2;width:100%;max-width:540px;padding:38px 32px 28px;border-radius:38px;text-align:center;background:linear-gradient(135deg,rgba(255,255,255,.68),rgba(255,255,255,.24));-webkit-backdrop-filter:blur(32px) saturate(210%);backdrop-filter:blur(32px) saturate(210%);border:1px solid rgba(255,255,255,.95);box-shadow:0 34px 90px rgba(10,90,210,.3),inset 0 2px 1px #fff,inset 0 -26px 46px rgba(10,132,255,.12);animation:lgrise .7s var(--ease) both}
+@keyframes lgrise{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+.lg-logo .ic.tile{width:92px;height:92px;margin:0 auto;display:block;vertical-align:0;filter:drop-shadow(0 12px 16px rgba(0,60,160,.4))}
+.lg-kicker{margin-top:16px;font-size:11.5px;font-weight:700;letter-spacing:.2em;color:var(--mu)}
+.lg-title{margin:6px 0 2px;font-size:clamp(32px,8vw,46px);line-height:1.05;font-weight:800;letter-spacing:.01em;background:linear-gradient(90deg,#0a5cff,#12b4ec);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg-year{font-size:15px;color:#27506f;font-weight:600}
+.lg-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px 0 24px}
+.lg-chips span{display:inline-flex;align-items:center;gap:2px;padding:6px 12px;border-radius:999px;font-size:12.5px;color:#1c4466;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.45));border:1px solid rgba(255,255,255,.95);box-shadow:0 3px 10px rgba(20,80,160,.12),inset 0 1.5px 0 #fff}
+.lg-start{position:relative;display:inline-flex;align-items:center;gap:10px;padding:15px 48px;border-radius:999px;border:1px solid rgba(255,255,255,.7);color:#fff;font:inherit;font-size:18px;font-weight:800;letter-spacing:.2em;cursor:pointer;background:linear-gradient(180deg,#63b8ff,#0a6cff);box-shadow:0 14px 34px rgba(10,108,255,.5),inset 0 2px 0 rgba(255,255,255,.7),inset 0 -12px 20px rgba(255,255,255,.22);transition:transform .28s var(--spring),box-shadow .2s}
+.lg-start:focus{outline:none}.lg-start:focus-visible{outline:3px solid rgba(255,255,255,.95);outline-offset:4px}.lg-start:hover{transform:translateY(-3px) scale(1.04)}.lg-start:active{transform:scale(.96)}
+.lg-start::after{content:"";position:absolute;inset:-6px;border-radius:inherit;border:2px solid rgba(10,132,255,.45);animation:lgpulse 2.2s ease-out infinite;pointer-events:none}
+@keyframes lgpulse{0%{transform:scale(.96);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+.lg-start .ic{width:1.1em;height:1.1em;margin:0}
+.lg-dev{margin-top:20px;font-size:11.5px;color:var(--mu)}
+@media(max-width:640px){.lg-kicker{letter-spacing:.1em;font-size:10.5px}.lg-f{display:none}.lg-card{padding:30px 20px 22px;border-radius:30px}.lg-logo .ic.tile{width:76px;height:76px}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #landing{background:linear-gradient(160deg,#0b1d3a,#0f3a73 50%,#0a1a33)}:root:not([data-theme="light"]) .lg-title{background:linear-gradient(90deg,#6cc4ff,#5ae0ff);-webkit-background-clip:text;background-clip:text}:root:not([data-theme="light"]) .lg-year,:root:not([data-theme="light"]) .lg-chips span{color:#d6e9ff}}
+
+:root{--ios:cubic-bezier(.2,.9,.25,1);--ios-in:cubic-bezier(.3,1.18,.5,1)}
+@keyframes lgOut{0%{opacity:1}30%{opacity:1}100%{opacity:0}}
+@keyframes lgCardOut{0%{opacity:1;transform:translate3d(0,0,0) scale(1)}100%{opacity:0;transform:translate3d(0,-8px,0) scale(1.12)}}
+@keyframes lgFOut{0%{opacity:1}100%{opacity:0;transform:scale(1.25)}}
+@keyframes lgBack{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+#landing.out .lg-card{animation:lgCardOut .5s cubic-bezier(.4,0,.2,1) both}
+#landing.out .lg-f{-webkit-backdrop-filter:none;backdrop-filter:none;animation:lgFOut .55s var(--ios) both}
+#landing.back{animation:lgBack .55s var(--ios) both}
+@keyframes appIn{0%{transform:translate3d(0,36px,0) scale(.92)}100%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes appOut{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(0,18px,0) scale(.95)}}
+body.lock>header,body.lock>nav,body.lock>main,body.lock>footer,#landing .lg-card,#landing .lg-f{will-change:transform}
+body.enter>*{will-change:transform}body.leave>*{will-change:transform}
+body.enter>header{animation:appIn .8s var(--ios-in) both}
+body.enter>nav{animation:appIn .8s var(--ios-in) .04s both}
+body.enter>main{animation:appIn .8s var(--ios-in) .08s both}
+body.enter>footer{animation:appIn .8s var(--ios-in) .12s both}
+body.leave>header,body.leave>nav,body.leave>main,body.leave>footer{animation:appOut .4s cubic-bezier(.4,0,.6,1) both}
+.lg-foot{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:6px 18px;flex-wrap:wrap;padding:12px 28px;font-size:11.5px;color:#fff;background:linear-gradient(90deg,rgba(10,96,225,.88),rgba(10,132,255,.78));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.5)}
+.lg-foot b{font-weight:700}
+@media(max-width:640px){.lg-foot{justify-content:center;text-align:center;padding:10px 14px;font-size:10.5px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head><body class="lock">
+<div id="landing" role="dialog" aria-label="Trang chủ">
+<svg class="lg-art" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
+<linearGradient id="lg-r1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a5cff"/><stop offset=".55" stop-color="#4fc3ff"/><stop offset="1" stop-color="#eaf7ff"/></linearGradient>
+<linearGradient id="lg-r2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fd6ff"/><stop offset="1" stop-color="#1d6bff"/></linearGradient>
+<linearGradient id="lg-p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".6" stop-color="#9ad8ff" stop-opacity=".55"/><stop offset="1" stop-color="#2f8cff" stop-opacity=".45"/></linearGradient>
+<linearGradient id="lg-st" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe6ff"/><stop offset="1" stop-color="#5fb5ff" stop-opacity=".2"/></linearGradient>
+<radialGradient id="lg-s" cx=".3" cy=".28" r=".85"><stop offset="0" stop-color="#fff"/><stop offset=".12" stop-color="#d9f2ff"/><stop offset=".45" stop-color="#5cc2ff"/><stop offset="1" stop-color="#0a4fd8"/></radialGradient>
+<radialGradient id="lg-s2" cx=".3" cy=".28" r=".85"><stop offset="0" stop-color="#fff"/><stop offset=".15" stop-color="#f1fbff"/><stop offset=".55" stop-color="#9fdcff"/><stop offset="1" stop-color="#4b9bff"/></radialGradient>
+<filter id="lg-b"><feGaussianBlur stdDeviation="1.4"/></filter></defs>
+<path d="M-60 600C180 380 420 760 660 560S1010 240 1270 430" stroke="url(#lg-r1)" stroke-width="86" fill="none" stroke-linecap="round" opacity=".9"/>
+<path d="M-60 600C180 380 420 760 660 560S1010 240 1270 430" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" opacity=".5" transform="translate(0 -26)"/>
+<path d="M-40 250C200 120 360 330 560 220S900 60 1260 190" stroke="url(#lg-r2)" stroke-width="44" fill="none" stroke-linecap="round" opacity=".55" filter="url(#lg-b)"/>
+<circle cx="130" cy="150" r="74" fill="url(#lg-s)"/><circle cx="1090" cy="640" r="96" fill="url(#lg-s2)"/><circle cx="240" cy="690" r="46" fill="url(#lg-s)"/><circle cx="1010" cy="110" r="36" fill="url(#lg-s2)"/>
+<g class="lg-flower" transform="translate(955 360)"><path d="M0 0C-10 120 -40 220 -20 360" stroke="url(#lg-st)" stroke-width="9" fill="none" stroke-linecap="round"/>
+<g class="lg-sway"><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(0)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(60)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(120)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(180)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(240)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(300)"/><circle r="26" fill="url(#lg-s2)" stroke="rgba(255,255,255,.8)" stroke-width="2"/></g></g>
+<g class="lg-flower2" transform="translate(190 470) scale(.55)"><g class="lg-sway"><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(0)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(60)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(120)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(180)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(240)"/><ellipse cy="-74" rx="40" ry="84" fill="url(#lg-p)" stroke="rgba(255,255,255,.85)" stroke-width="2" transform="rotate(300)"/><circle r="26" fill="url(#lg-s)" stroke="rgba(255,255,255,.8)" stroke-width="2"/></g></g>
+</svg>
+<div class="lg-f lg-f1" id="lgf1"></div><div class="lg-f lg-f2" id="lgf2"></div><div class="lg-f lg-f3" id="lgf3"></div><div class="lg-f lg-f4" id="lgf4"></div>
+<div class="lg-card"><div class="lg-logo" id="lglogo"></div>
+<div class="lg-kicker">HỆ THỐNG QUẢN LÝ THI ĐUA ĐOÀN VIÊN</div>
+<h2 class="lg-title">CHI ĐOÀN 11A3</h2><div class="lg-year">Năm học 2026 – 2027</div>
+<div class="lg-chips" id="lgchips"></div>
+<button class="lg-start" id="startbtn" onclick="startApp()"><span>START</span><span id="lgarrow"></span></button>
+</div><div class="lg-foot"><span><b>Nhà phát triển:</b> Nguyễn Thành Nam</span><span>© Bản quyền thuộc về Nguyễn Thành Nam · Phục vụ có thời hạn cho: Chi Đoàn 11A3 – Năm học 2026 – 2027</span></div></div>
+<header><h1 class="brand" onclick="showLanding()" style="cursor:pointer" title="Về trang chủ"><span id="logo"></span>CHI ĐOÀN 11A3 — HỆ THỐNG QUẢN LÝ THI ĐUA</h1><span class="chip" id="st">…</span></header>
+<nav id="nav"></nav>
+<main id="app"></main>
+<footer id="foot"><div><b>Nhà phát triển:</b> Nguyễn Thành Nam</div><div><b>Bản quyền:</b> Nguyễn Thành Nam</div><div><b>Phục vụ có thời hạn cho:</b> Chi Đoàn 11A3 - Năm học 2026 - 2027</div><div><b>Liên hệ:</b> <a href="tel:0377446842">037 744 6842</a> (Ng Nam)</div><div><b>Email:</b> <a href="mailto:namnguyen20092010@gmail.com">namnguyen20092010@gmail.com</a></div><div class="note"><i>(Sau khi hết thời gian phục vụ, trong năm học tiếp theo sẽ tiếp tục gia hạn sử dụng)</i></div></footer>
+<script>
+const NAMES="Trần Nguyễn Bảo An|Nguyễn Ngọc Vân Anh|Bùi Giang Gia Bảo|Nguyễn Gia Hân|Nguyễn Lưu Xuân Hùng|Nguyễn Đoàn Gia Huy|Lê Quỳnh Hương|Nguyễn Trần Ngọc Quỳnh Hương|Lê Duy Khang|Nguyễn Quang Khuyến|Trần Ngọc Hồng Lam|Võ Ngọc Phương Lam|Nguyễn Nhật Lâm|Bùi Thị Khánh Linh|Võ Ngọc Phương Linh|Trần Hoàng Phước Lộc|Lê Thị Tuyết Mai|Nguyễn Thành Nam|Lương Thị Kim Ngân|Nguyễn Trần Thanh Ngọc|Ngô Trí Nguyễn|Trần Huỳnh Dạ Nguyệt|Trần Thị Linh Nhi|Huỳnh Ngọc Yến Như|Lê Thị Yến Phương|Trương Thị Bích Quyền|Huỳnh Nguyễn Như Quỳnh|Nguyễn Thị Như Quỳnh|Trần Mai Thanh|Phan Tấn Thành|Hồ Hoàng Tiến|Nguyễn Phúc Toàn|Nguyễn Phước Toàn|Nguyễn Thị Bích Trâm|Phan Nguyễn Khánh Trung|Nguyễn Ngọc Minh Tú|Đỗ Thị Ngọc Tuyền|Bùi Bảo Việt|Nguyễn Phạm Như Ý".split("|");
+const BASE=100;
+// Tiêu chí lấy từ Kế hoạch thi đua. t: loại điểm (ht=học tập, kl=kỷ luật, pt1/pt2=phong trào, cttn)
+const CRIT=[
+["Phát biểu đúng trong tiết học",5,"ht"],["Phát biểu còn thiếu hoặc sai",3,"ht"],["KTTX / kiểm tra bài cũ đạt 10",5,"ht"],["Thi giữa kỳ / cuối kỳ đạt 10",10,"ht"],
+["Không thuộc bài / không làm bài / không chuẩn bị",-5,"ht"],["Mất trật tự, làm việc riêng",-5,"ht"],["GV ghi tên vào sổ đầu bài",-5,"ht"],
+["Vắng có phép",-1,"kl"],["Đi trễ / vắng không phép",-5,"kl"],["Trốn tiết",-10,"kl"],["Vi phạm nội quy (đồng phục, huy hiệu, tóc...)",-10,"kl"],
+["Xả rác, viết vẽ bàn ghế, tường",-10,"kl"],["Gây rối trật tự trường, lớp",-10,"kl"],["Nói tục, chửi thề, leo rào",-10,"kl"],["Phá hoại của công",-10,"kl"],["Vi phạm điều cấm đối với học sinh",-10,"kl"],
+["CTTN: có thực hiện",50,"cttn"],["CTTN: không thực hiện",-50,"cttn"],
+["Phong trào / cuộc thi: có tham gia",50,"pt1"],["Phong trào / cuộc thi: không tham gia",-50,"pt1"],["Thi trực tuyến: có tham gia",50,"pt2"],["Thi trực tuyến: không tham gia",-50,"pt2"]];
+const AW={"Trường":[20,15,10,5],"Tỉnh":[40,35,30,25],"Quốc gia":[50,45,40,35]},RK=["Nhất","Nhì","Ba","Khuyến Khích"];
+const WEEKS=[];for(let w=5;w<=34;w++)WEEKS.push(w);const sem=w=>w<=17?1:2;
+let rv=1,sc=1,ptsc=1,csel=-1,srt=true,pd={k:"cn",lv:"",name:"",aw:"Nhất",w:0,col:"pt2",m1:-1,mem:[]},re=false,ch=1,S={ev:[],lock:{},team:{}},tab="week",wk=5,sel=null,hk=1;
+try{const r=localStorage.getItem("td11a3");if(r)S=JSON.parse(r)}catch(e){}
+const persist=()=>{try{localStorage.setItem("td11a3",JSON.stringify(S))}catch(e){}};
+const save=()=>{persist();schedule()};
+let DB=null,RO=false,timer=null,busy=false,dirty=false,last={};
+const f=x=>(Math.round(x*100)/100).toString().replace(".",",");
+const cls=x=>x>0?"p":x<0?"n":"mu";const sg=x=>(x>0?"+":"")+f(x);
+function calc(i,w){let tr=0,cg=0,p1=0,p2=0,p3=0,p4=0,p5=0,ct=0;
+ for(const e of S.ev){if(e.s!==i||e.w!==w)continue;
+  if(e.t==="ht"||e.t==="kl"){e.p<0?tr+=e.p:cg+=e.p}else if(e.t==="pt1")p1+=e.p;else if(e.t==="pt2")p2+=e.p;else if(e.t==="pt3")p3+=e.p;else if(e.t==="pt4")p4+=e.p;else if(e.t==="pt5")p5+=e.p;else ct+=e.p}
+ return{tr,cg,p1,p2,p3,p4,p5,ct,tot:BASE+tr+cg+p1+p2+p3+p4+p5+ct}}
+function rank(arr){const s=[...arr].sort((a,b)=>b-a);return arr.map(v=>s.indexOf(v)+1)}
+function weekRows(w){const r=NAMES.map((_,i)=>calc(i,w));const rk=rank(r.map(x=>x.tot));return r.map((x,i)=>({...x,rk:rk[i]}))}
+function semData(h){const ws=WEEKS.filter(w=>(h===3||sem(w)===h)&&S.lock[w]);
+ const rows=NAMES.map((_,i)=>{const sc=WEEKS.filter(w=>(h===3||sem(w)===h)).map(w=>S.lock[w]?calc(i,w).tot:null);const v=sc.filter(x=>x!==null);
+  return{i,sc,sum:v.reduce((a,b)=>a+b,0),avg:v.length?v.reduce((a,b)=>a+b,0)/v.length:null}});
+ const rk=rank(rows.map(r=>r.avg??-1e9));rows.forEach((r,k)=>r.rk=rk[k]);return{ws,rows}}
+const $=s=>document.getElementById(s);
+let DL=null;
+const MIME={xlsx:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",csv:"text/csv;charset=utf-8",json:"application/json"};
+const BROWSER_DL={save:async({filename,data})=>{const ext=(filename.split(".").pop()||"").toLowerCase(),b=new Blob([data],{type:MIME[ext]||"application/octet-stream"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}};
+(async()=>{try{DL=await claude.use("downloads")}catch(e){DL=null}if(!DL)DL=BROWSER_DL;setTimeout(draw,0)})();
+async function dl(name,rows){if(!DL)return alert("Môi trường này không hỗ trợ tải file.");
+ try{await DL.save({filename:name,data:"\ufeff"+rows.join("\n")})}catch(e){if(e&&e.code!=="declined")alert("Không tải được: "+(e.message||e))}}
+const fc=x=>'"'+f(x)+'"';
+const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+function weekCsv(w){const R=weekRows(w);const L=["STT,Họ và tên,Tổ,Điểm chuẩn,Điểm trừ,Điểm cộng,Phong trào 1,Phong trào 2,Phong trào 3,Phong trào 4,Phong trào 5,CTTN,Tổng điểm,Xếp hạng"];
+ R.forEach((x,i)=>L.push([i+1,q(NAMES[i]),S.team[i]||"",BASE,fc(x.tr),fc(x.cg),fc(x.p1),fc(x.p2),fc(x.p3),fc(x.p4),fc(x.p5),fc(x.ct),fc(x.tot),x.rk].join(",")));return L}
+function dlWeek(){dl(`thi-dua-tuan-${wk}-11A3.csv`,weekCsv(wk))}
+function dlDetail(){const L=["Tuần,STT,Họ và tên,Nhóm,Nội dung,Điểm,Ghi chú"];const g={ht:"Học tập",kl:"Kỷ luật",cttn:"CTTN",pt1:"Phong trào 1",pt2:"Phong trào 2",pt3:"Phong trào 3",pt4:"Phong trào 4",pt5:"Phong trào 5"};
+ S.ev.filter(e=>e.w===wk).sort((a,b)=>a.s-b.s).forEach(e=>L.push([e.w,e.s+1,q(NAMES[e.s]),g[e.t],q(e.n),e.p,q(e.note||"")].join(",")));dl(`chi-tiet-tuan-${wk}-11A3.csv`,L)}
+function dlAll(){const L=["Tuần,Học kỳ,STT,Họ và tên,Tổ,Điểm chuẩn,Điểm trừ,Điểm cộng,Phong trào 1,Phong trào 2,Phong trào 3,Phong trào 4,Phong trào 5,CTTN,Tổng điểm,Xếp hạng"];
+ WEEKS.forEach(w=>weekRows(w).forEach((x,i)=>{if(S.lock[w]||S.ev.some(e=>e.w===w))L.push([w,"HK"+sem(w),i+1,q(NAMES[i]),S.team[i]||"",BASE,fc(x.tr),fc(x.cg),fc(x.p1),fc(x.p2),fc(x.p3),fc(x.p4),fc(x.p5),fc(x.ct),fc(x.tot),x.rk].join(","))}));dl("thi-dua-cac-tuan-11A3.csv",L)}
+function nav(){const t=[["week","Thi đua tuần","cal"],["cttn","CTTN","leaf"],["pt","Phong trào","target"],["team","Tổ","users"],["role","Cán bộ lớp","star"],["sem","Học kỳ","trophy"],["sum","Tổng kết","bars"],["review","Nhận xét","note"],["rule","Quy chế","sliders"]],n=$("nav");
+ if(n.children&&n.children.length===t.length+1)[...n.querySelectorAll("button")].forEach((b,i)=>b.classList.toggle("on",t[i][0]===tab));
+ else n.innerHTML='<i class="ind"></i>'+t.map(([k,l,ic])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';sel=null;draw()">${I(ic,"tile")}<span>${l}</span></button>`).join("");
+ try{const a=n.querySelector("button.on"),i=n.querySelector(".ind");if(a&&i){i.style.width=a.offsetWidth+"px";i.style.transform="translateX("+a.offsetLeft+"px)";if(n.scrollTo&&n.scrollWidth>n.clientWidth)n.scrollTo({left:a.offsetLeft-20,behavior:"smooth"})}}catch(e){}}
+let lastAk="";
+function animIn(){const ak=tab+"|"+({week:wk,team:wk,cttn:ch,sem:hk,review:rv,sum:sc+"-"+wk,pt:ptsc}[tab]??"");if(ak===lastAk)return;lastAk=ak;try{const a=$("app");a.classList.remove("in");void a.offsetWidth;a.classList.add("in")}catch(e){}}
+try{window.addEventListener("resize",nav);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(nav)}catch(e){}
+function wsel(){return`<div class="row"><button class="b g" onclick="wk=Math.max(5,wk-1);draw()">←</button><select onchange="wk=+this.value;draw()">${WEEKS.map(w=>`<option value="${w}" ${w===wk?"selected":""}>Tuần ${w} (HK${sem(w)})</option>`).join("")}</select><button class="b g" onclick="wk=Math.min(34,wk+1);draw()">→</button>
+<label><input type="checkbox" ${S.lock[wk]?"checked":""} onchange="S.lock[wk]=this.checked;save();draw()"> 🔒 Chốt tuần (tính vào học kỳ)</label><label><input type="checkbox" ${srt?"checked":""} onchange="srt=this.checked;draw()"> ↕ Xếp theo hạng</label>${DL?`<button class="b" onclick="dlWeek()">⬇ Tải điểm tuần ${wk}</button><button class="b g" onclick="dlDetail()">⬇ Chi tiết sự kiện</button><button class="b g" onclick="dlAll()">⬇ Tất cả các tuần</button><button class="b" onclick="xl(['week'],'thi-dua-tuan-${wk}-11A3.xlsx')">📗 Excel tuần ${wk}</button>`:""}</div>`}
+function weekView(){const L=!!S.lock[wk],R=weekRows(wk);const avg=R.reduce((a,x)=>a+x.tot,0)/R.length;
+ let h=`<div class="card">${wsel()}</div><div class="stats"><div>Điểm TB lớp<b>${f(avg)}</b></div><div>Cao nhất<b>${f(Math.max(...R.map(x=>x.tot)))}</b></div><div>Thấp nhất<b>${f(Math.min(...R.map(x=>x.tot)))}</b></div><div>Sự kiện tuần<b>${S.ev.filter(e=>e.w===wk).length}</b></div></div>`;
+ if(!L&&!RO)h+=`<div class="card"><b>+ Thêm sự kiện — Tuần ${wk}</b><div class="row" style="margin-top:8px"><select id="es">${NAMES.map((n,i)=>`<option value="${i}" ${sel===i?"selected":""}>${i+1}. ${n}</option>`).join("")}</select>
+ <select id="ec" onchange="cc()">${CR().map((c,i)=>`<option value="${i}">${c[0]} (${sg(c[1])})</option>`).join("")}<option value="aw">Giải thưởng phong trào…</option></select>
+ <span id="awb" class="hide row"><select id="al">${Object.keys(AWD()).map(k=>`<option>${k}</option>`).join("")}</select><select id="ar">${RK.map(k=>`<option>${k}</option>`).join("")}</select><select id="ap" title="Tính vào cột">${[1,2,3,4,5].map(k=>`<option value="pt${k}" ${k==2?"selected":""}>→ PT${k}</option>`).join("")}</select></span>
+ <input id="eq" type="number" min="1" value="1" style="width:60px" title="Số lần"><input id="en" placeholder="Ghi chú"><button class="b" onclick="addEv()">Lưu</button></div></div>`;
+ else if(L)h+=`<div class="card mu">🔒 Tuần đã chốt. Bỏ chọn “Chốt tuần” để chỉnh sửa.</div>`;
+ h+=`<div class="card wrap"><table><tr><th>STT</th><th>Họ và tên</th><th>Tổ</th><th>Chuẩn</th><th>Trừ</th><th>Cộng</th><th>PT1</th><th>PT2</th><th>PT3</th><th>PT4</th><th>PT5</th><th>CTTN</th><th>Tổng</th><th>Hạng</th></tr>`+
+ OR(R).map(i=>{const x=R[i];return`<tr class="cl" onclick="sel=${i};draw()"><td>${i+1}</td><td>${NAMES[i]}</td><td>${S.team[i]||"–"}</td><td>${BASE}</td><td class="${cls(x.tr)}">${f(x.tr)}</td><td class="${cls(x.cg)}">${f(x.cg)}</td><td class="${cls(x.p1)}">${f(x.p1)}</td><td class="${cls(x.p2)}">${f(x.p2)}</td><td class="${cls(x.p3)}">${f(x.p3)}</td><td class="${cls(x.p4)}">${f(x.p4)}</td><td class="${cls(x.p5)}">${f(x.p5)}</td><td class="${cls(x.ct)}">${f(x.ct)}</td><td><b>${f(x.tot)}</b></td><td><span class="badge">${x.rk}</span></td></tr>`}).join("")+`</table></div>`;
+ if(sel!==null){const ev=S.ev.map((e,k)=>({...e,k})).filter(e=>e.s===sel&&e.w===wk);
+  h+=`<div class="card"><b>${NAMES[sel]} — chi tiết tuần ${wk}</b>`+(ev.length?ev.map(e=>`<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--bd);padding:5px 0"><span>${e.n}${e.note?` <span class="mu">· ${e.note}</span>`:""}</span><span><b class="${cls(e.p)}">${sg(e.p)}</b> ${L||RO?"":`<button class="b g" onclick="delEv(${e.k})">Xóa</button>`}</span></div>`).join(""):`<div class="mu">Chưa có sự kiện.</div>`)+`</div>`}
+ return h}
+function cc(){$("awb").classList.toggle("hide",$("ec").value!=="aw")}
+function addEv(){const s=+$("es").value,c=$("ec").value,q=Math.max(1,+$("eq").value||1),note=$("en").value;let n,p,t;
+ if(c==="aw"){const l=$("al").value,r=$("ar").selectedIndex;p=AWD()[l][r];n=`Giải ${$("ar").value} cấp ${l}`;t=$("ap").value||"pt2"}else{const x=CR()[+c];n=x[0];p=x[1];t=x[2]}
+ for(let k=0;k<q;k++)S.ev.push({s,w:wk,t,p,n,note});sel=s;save();draw()}
+function delEv(k){S.ev.splice(k,1);save();draw()}
+function cttnView(){const ws=WEEKS.filter(w=>sem(w)===ch);
+ let h=`<div class="card row"><button class="b ${ch===1?"":"g"}" onclick="ch=1;draw()">CTTN HKI (tuần 5–17)</button><button class="b ${ch===2?"":"g"}" onclick="ch=2;draw()">CTTN HKII (tuần 18–34)</button>${DL?`<button class="b g" onclick="dlCttn()">⬇ Tải CTTN HK${ch}</button><button class="b" onclick="xl(['cttn${ch}'],'CTTN-HK${ch}-11A3.xlsx')">📗 Excel CTTN HK${ch}</button>`:""}</div><div class="card mu">Nhập nhanh CTTN theo tuần: 50 = có thực hiện, -50 = không, hoặc điểm khác tùy mức tích cực (thang 50). Ô trống = chưa nhập. Tuần đã chốt không sửa được.</div><div class="card wrap"><table><tr><th>STT</th><th>Họ và tên</th>${ws.map(w=>`<th>T${w}</th>`).join("")}</tr>`;
+ NAMES.forEach((n,i)=>{h+=`<tr><td>${i+1}</td><td>${n}</td>`+ws.map(w=>{const e=S.ev.filter(e=>e.s===i&&e.w===w&&e.t==="cttn");const v=e.length?e.reduce((a,b)=>a+b.p,0):"";return`<td><input class="cell" type="number" value="${v}" ${S.lock[w]?"disabled":""} onchange="setC(${i},${w},this.value)"></td>`}).join("")+`</tr>`});
+ return h+`</table></div>`}
+function dlCttn(){const ws=WEEKS.filter(w=>sem(w)===ch);const L=[["STT","Họ và tên",...ws.map(w=>"T"+w)].join(",")];
+ NAMES.forEach((n,i)=>L.push([i+1,q(n),...ws.map(w=>{const e=S.ev.filter(e=>e.s===i&&e.w===w&&e.t==="cttn");return e.length?e.reduce((a,b)=>a+b.p,0):""})].join(",")));dl(`CTTN-HK${ch}-11A3.csv`,L)}
+function setC(i,w,v){S.ev=S.ev.filter(e=>!(e.s===i&&e.w===w&&e.t==="cttn"));if(v!==""&&+v!==0)S.ev.push({s:i,w,t:"cttn",p:+v,n:"Công trình thanh niên",note:""});save();draw()}
+function semView(){const{ws,rows}=semData(hk),all=WEEKS.filter(w=>hk===3||sem(w)===hk),RV=reviewRows(hk);
+ let h=`<div class="card row"><button class="b ${hk===1?"":"g"}" onclick="hk=1;draw()">HKI (tuần 5–17)</button><button class="b ${hk===2?"":"g"}" onclick="hk=2;draw()">HKII (tuần 18–34)</button><button class="b ${hk===3?"":"g"}" onclick="hk=3;draw()">Cả năm (tuần 5–34)</button>${DL?`<button class="b g" onclick="csv()">⬇ Xuất CSV</button><button class="b" onclick="xl(['sem${hk}'],'tong-ket-${hk===3?"ca-nam":"HK"+hk}-11A3.xlsx')">📗 Excel ${hk===3?"cả năm":"HK"+hk}</button><button class="b g" onclick="xl(['personal'],'ca-nhan-11A3.xlsx')">📗 Excel cá nhân</button>`:""}<label><input type="checkbox" ${srt?"checked":""} onchange="srt=this.checked;draw()"> ↕ Xếp theo hạng</label><span class="mu">Đã chốt ${ws.length}/${all.length} tuần. ${hk===3?"Điểm TB cả năm = (Tuần 5 + Tuần 6 + … + Tuần 34) ÷ số tuần thi đua (các tuần đã chốt).":"Điểm HK = tổng điểm các tuần đã chốt ÷ số tuần đã chốt."}</span></div>`;
+ h+=`<div class="card wrap"><table><tr><th>STT</th><th>Họ và tên</th>${all.map(w=>`<th>T${w}</th>`).join("")}<th>Tổng</th><th>${hk===3?"TB cả năm":"TB HK"}</th><th>Hạng</th><th style="text-align:left">Nhận xét</th></tr>`+
+ SO(rows).map(r=>`<tr><td>${r.i+1}</td><td>${NAMES[r.i]}</td>${r.sc.map(v=>`<td class="${v===null?"mu":""}">${v===null?"–":f(v)}</td>`).join("")}<td>${f(r.sum)}</td><td><b>${r.avg===null?"–":f(r.avg)}</b></td><td>${r.avg===null?"–":`<span class="badge">${r.rk}</span>`}</td><td style="text-align:left">${RV[r.i].lv||"–"}</td></tr>`).join("")+`</table></div>`;return h}
+function csv(){const{rows}=semData(hk),all=WEEKS.filter(w=>hk===3||sem(w)===hk);
+ const L=[["STT","Họ và tên","Tổ",...all.map(w=>"T"+w),"Tổng","TB HK","Hạng"].join(",")];
+ rows.forEach(r=>L.push([r.i+1,q(NAMES[r.i]),S.team[r.i]||"",...r.sc.map(v=>v===null?"":fc(v)),fc(r.sum),r.avg===null?"":fc(r.avg),r.avg===null?"":r.rk].join(",")));
+ dl(`tong-ket-${hk===3?"ca-nam":"HK"+hk}-11A3.csv`,L)}
+const nt=()=>Math.min(10,Math.max(1,+S.nt||4));
+const tl=()=>Array.from({length:nt()},(_,k)=>k+1);
+function setT(i,v){if(v==="")delete S.team[i];else S.team[i]=v;save();draw()}
+function autoT(){NAMES.forEach((_,i)=>S.team[i]=String(i%nt()+1));save();draw()}
+function clearT(){if(confirm("Xóa toàn bộ phân tổ?")){S.team={};save();draw()}}
+function setNt(v){S.nt=Math.min(10,Math.max(1,+v||4));for(const k in S.team)if(+S.team[k]>S.nt)delete S.team[k];save();draw()}
+function dlTeam(){const L=["STT,Họ và tên,Tổ"];NAMES.forEach((n,i)=>L.push([i+1,q(n),S.team[i]||""].join(",")));dl("phan-to-11A3.csv",L)}
+function teamView(){const R=weekRows(wk),un=NAMES.map((_,i)=>i).filter(i=>!S.team[i]);
+ let h=`<div class="card row"><label>Số tổ: <input type="number" min="1" max="10" value="${nt()}" style="width:60px" onchange="setNt(this.value)"></label><button class="b" onclick="autoT()">Chia đều tự động</button><button class="b g" onclick="clearT()">Xóa phân tổ</button>${DL?`<button class="b g" onclick="dlTeam()">⬇ Tải danh sách tổ</button>`:""}<span class="mu">Chưa phân tổ: ${un.length}/${NAMES.length}. Chia tự động xếp luân phiên theo STT; sau đó có thể chỉnh từng bạn ở bảng dưới.</span></div><div class="stats">`;
+ h+=tl().map(t=>{const m=NAMES.map((_,i)=>i).filter(i=>S.team[i]==t);const a=m.length?m.reduce((x,i)=>x+R[i].tot,0)/m.length:null;
+  return`<div style="text-align:left"><b>Tổ ${t}</b>${m.length} thành viên<br><span class="mu">Điểm tổ tuần ${wk}: </span><b style="display:inline;font-size:15px">${a===null?"–":f(a)}</b><div class="mu" style="margin-top:6px;white-space:normal">${m.length?m.map(i=>NAMES[i]).join(" · "):"Chưa có thành viên"}</div></div>`}).join("");
+ h+=`</div><div class="card wrap"><table><tr><th>STT</th><th>Họ và tên</th><th>Tổ</th></tr>`+NAMES.map((n,i)=>`<tr><td>${i+1}</td><td>${n}</td><td><select onchange="setT(${i},this.value)"><option value="">Chưa phân</option>${tl().map(t=>`<option value="${t}" ${S.team[i]==t?"selected":""}>Tổ ${t}</option>`).join("")}</select></td></tr>`).join("")+`</table></div>`;return h}
+const CR=()=>S.crit||CRIT,AWD=()=>S.aw||AW,ea=x=>String(x).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const cloneC=()=>S.crit=S.crit||CRIT.map(c=>[...c]),cloneA=()=>S.aw=S.aw||JSON.parse(JSON.stringify(AW));
+function setCr(k,f,v){cloneC();if(f===1){if(v===""||isNaN(+v))return draw();v=+v}S.crit[k][f]=v;save();draw()}
+function delCr(k){if(!confirm("Xóa nội dung này khỏi quy chế? (Điểm đã nhập trước đó không bị ảnh hưởng)"))return;cloneC().splice(k,1);save();draw()}
+function addCr(){const n=$("nn").value.trim(),p=$("np").value;if(!n||p===""||isNaN(+p))return alert("Nhập nội dung và điểm số.");cloneC().push([n,+p,$("ng").value]);save();draw()}
+function setAw(l,r,v){if(v===""||isNaN(+v))return draw();cloneA()[l][r]=+v;save();draw()}
+function renLv(o,n){n=n.trim();if(!n||n===o)return draw();const A=cloneA();if(A[n]){alert("Cấp này đã tồn tại.");return draw()}S.aw=Object.fromEntries(Object.entries(A).map(([k,v])=>[k===o?n:k,v]));save();draw()}
+function delLv(l){if(!confirm("Xóa cấp "+l+"?"))return;delete cloneA()[l];save();draw()}
+function addLv(){const n=$("nl").value.trim();if(!n)return alert("Nhập tên cấp.");const A=cloneA();if(A[n])return alert("Cấp này đã tồn tại.");A[n]=RK.map(()=>0);save();draw()}
+function ruleView(){const g={ht:"Học tập",kl:"Kỷ luật",cttn:"Công trình thanh niên",pt1:"Phong trào 1",pt2:"Phong trào 2 (thi trực tuyến)",pt3:"Phong trào 3",pt4:"Phong trào 4",pt5:"Phong trào 5"},C=CR(),A=AWD(),E=re&&!RO;
+ const gs=(sel,id,on)=>`<select ${id?`id="${id}"`:""} ${on?`onchange="${on}"`:""}>${Object.entries(g).map(([k,v])=>`<option value="${k}" ${k===sel?"selected":""}>${v}</option>`).join("")}</select>`;
+ let h=`<div class="card row"><b>Quy chế thi đua</b>${RO?"":`<label><input type="checkbox" ${E?"checked":""} onchange="re=this.checked;draw()"> ✏ Bật chế độ chỉnh sửa (Ban quản lý)</label>`}<span class="mu">Thay đổi quy chế chỉ áp dụng cho các sự kiện nhập sau đó; điểm đã nhập giữ nguyên.</span></div>`;
+ h+=`<div class="card wrap"><b>Tiêu chí chấm điểm</b><table><tr><th style="text-align:left">Nhóm</th><th style="text-align:left">Nội dung</th><th>Điểm</th>${E?"<th></th>":""}</tr>`+
+ C.map((c,k)=>E?`<tr><td style="text-align:left">${gs(c[2],"",`setCr(${k},2,this.value)`)}</td><td style="text-align:left"><input style="width:100%;min-width:260px" value="${ea(c[0])}" onchange="setCr(${k},0,this.value)"></td><td><input type="number" class="cell" value="${c[1]}" onchange="setCr(${k},1,this.value)"></td><td><button class="b g" onclick="delCr(${k})">🗑</button></td></tr>`
+ :`<tr><td style="text-align:left">${g[c[2]]||c[2]}</td><td style="text-align:left">${ea(c[0])}</td><td class="${cls(c[1])}">${sg(c[1])}</td></tr>`).join("")+
+ (E?`<tr><td style="text-align:left">${gs("ht","ng")}</td><td style="text-align:left"><input id="nn" placeholder="Nội dung mới…" style="width:100%;min-width:260px"></td><td><input id="np" type="number" class="cell" placeholder="±điểm"></td><td><button class="b" onclick="addCr()">+ Thêm</button></td></tr>`:"")+`</table>`+
+ (E?`<p><button class="b g" onclick="if(confirm('Khôi phục tiêu chí về mặc định theo Kế hoạch?')){delete S.crit;save();draw()}">Khôi phục mặc định</button></p>`:`<p class="mu">Không trừ điểm: tham gia phong trào do trường điều động, gia đình có tang, nằm viện, khám bệnh có giấy bác sĩ.</p>`)+`</div>`;
+ const w=Math.floor(80/RK.length);
+ h+=`<div class="card wrap"><b>Quy đổi giải thưởng (điểm cộng/hs)</b><table style="table-layout:fixed;min-width:480px"><tr><th style="width:20%;text-align:left">Cấp</th>${RK.map(k=>`<th style="width:${w}%;text-align:center">${k}</th>`).join("")}${E?'<th style="width:44px"></th>':""}</tr>`+
+ Object.entries(A).map(([k,v])=>`<tr><td style="text-align:left">${E?`<input style="width:100%" value="${ea(k)}" onchange="renLv(${JSON.stringify(k).replace(/"/g,"&quot;")},this.value)">`:k}</td>${v.map((x,r)=>`<td style="text-align:center">${E?`<input type="number" class="cell" value="${x}" onchange="setAw(${JSON.stringify(k).replace(/"/g,"&quot;")},${r},this.value)">`:"+"+x}</td>`).join("")}${E?`<td><button class="b g" onclick="delLv(${JSON.stringify(k).replace(/"/g,"&quot;")})">🗑</button></td>`:""}</tr>`).join("")+`</table>`+
+ (E?`<p class="row"><input id="nl" placeholder="Tên cấp mới (vd: Huyện)"><button class="b" onclick="addLv()">+ Thêm cấp</button><button class="b g" onclick="if(confirm('Khôi phục bảng giải thưởng về mặc định?')){delete S.aw;save();draw()}">Khôi phục mặc định</button></p>`:"")+`</div>`;
+ const c=CUT();
+ h+=`<div class="card"><b>Ngưỡng nhận xét đoàn viên</b><p>Xếp theo điểm TB (hạng/số đoàn viên có điểm): top ${E?`<input type="number" class="cell" value="${c.a}" onchange="setCut('a',this.value)">`:c.a}% → <b>${LV[0]}</b>; từ ${c.a+1}% đến ${E?`<input type="number" class="cell" value="${c.b}" onchange="setCut('b',this.value)">`:c.b}% → <b>${LV[1]}</b>; còn lại → <b>${LV[2]}</b>.</p></div>`;
+ return h+`<div class="card"><b>Dữ liệu</b><p>Trạng thái: <b>${ST[stk]}</b>. ${DB?"Dữ liệu được lưu trên máy chủ của trang: mọi người mở link đều thấy cùng số liệu. Người được chia sẻ quyền Contributor/Editor có thể nhập, người chỉ có quyền Viewer chỉ xem.":"Chưa kết nối máy chủ — dữ liệu chỉ lưu trên trình duyệt này."}</p><div class="row">${DL?`<button class="b" onclick="xl(['week','cttn1','cttn2','team','role','pt1','pt2','pt3','personal','sum','stats','review','sem1','sem2','events'],'tong-hop-thi-dua-11A3.xlsx')">📗 Xuất Excel toàn bộ</button><button class="b g" onclick="dlJson()">⬇ Sao lưu toàn bộ (JSON)</button>`:""}${RO?"":`<button class="b g" onclick="$('rf').click()">⬆ Khôi phục từ file</button><input id="rf" type="file" accept=".json,application/json" hidden onchange="restoreFile(this.files[0]);this.value=''">${localStorage.getItem("td11a3_backup")?`<button class="b g" onclick="restoreOld()">↩ Lấy lại dữ liệu cũ trên máy này</button>`:""}<button class="b g" onclick="if(confirm('Xóa toàn bộ dữ liệu đã nhập?')){S={ev:[],lock:{},team:{}};save();draw()}">Xóa toàn bộ dữ liệu</button>`}</div></div>`}
+const TN=()=>S.tn||4,tname=t=>(S.tname&&S.tname[t])||"Tổ "+t,TL=()=>Array.from({length:TN()},(_,k)=>k+1);
+function teamAgg(vals){const r=TL().map(t=>{const m=NAMES.map((_,i)=>i).filter(i=>String(S.team[i])===String(t)&&vals[i]!==null&&vals[i]!==undefined);
+ return{t,n:NAMES.filter((_,i)=>String(S.team[i])===String(t)).length,v:m.length?m.reduce((a,i)=>a+vals[i],0)/m.length:null}});
+ const sc=r.map(x=>x.v??-1e9),k=rank(sc);r.forEach((x,j)=>x.rk=x.v===null?null:k[j]);return r}
+function teamTable(r,title){const mx=Math.max(1,...r.map(x=>x.v||0));
+ return`<div class="card wrap"><b>${title}</b><table><tr><th>Hạng</th><th>Tổ</th><th>Thành viên</th><th>Điểm TB tổ</th><th></th></tr>`+[...r].sort((a,b)=>(a.rk||99)-(b.rk||99)).map(x=>`<tr><td>${x.rk?`<span class="badge">${x.rk}</span>`:"–"}</td><td>${tname(x.t)}</td><td>${x.n}</td><td><b>${x.v===null?"–":f(x.v)}</b></td><td style="width:35%"><div style="height:8px;border-radius:4px;background:var(--ac);width:${x.v?x.v/mx*100:0}%"></div></td></tr>`).join("")+`</table></div>`}
+function teamView(){const R=weekRows(wk),un=NAMES.filter((_,i)=>!S.team[i]).length;
+ const wv=R.map(x=>x.tot);
+ let h=`<div class="card"><b>Chia tổ</b><div class="row" style="margin-top:8px"><label>Số tổ <select onchange="S.tn=+this.value;save();draw()">${[2,3,4,5,6,7,8].map(n=>`<option ${n===TN()?"selected":""}>${n}</option>`).join("")}</select></label>
+ <button class="b" onclick="autoTeam()">Chia đều tự động</button><button class="b g" onclick="if(confirm('Bỏ phân tổ của tất cả học sinh?')){S.team={};save();draw()}">Bỏ phân tổ</button>${un?`<span class="n">Còn ${un} học sinh chưa có tổ</span>`:`<span class="p">✓ Đã phân đủ 39 học sinh</span>`}</div>
+ <div class="row" style="margin-top:8px">${TL().map(t=>`<input value="${tname(t)}" style="width:110px" onchange="S.tname=S.tname||{};S.tname[${t}]=this.value;save();draw()">`).join("")}</div></div>`;
+ h+=`<div class="card row"><span>Xem điểm tổ tuần:</span><select onchange="wk=+this.value;draw()">${WEEKS.map(w=>`<option value="${w}" ${w===wk?"selected":""}>Tuần ${w}</option>`).join("")}</select>${DL?`<button class="b g" onclick="dlTeam()">⬇ Tải xếp hạng tổ</button><button class="b" onclick="xl(['team'],'xep-hang-to-11A3.xlsx')">📗 Excel tổ</button>`:""}</div>`;
+ h+=teamTable(teamAgg(wv),`Xếp hạng tổ — Tuần ${wk}`);
+ for(const k of [1,2]){const rows=semData(k).rows,a=teamAgg(rows.map(r=>r.avg));h+=teamTable(a,`Xếp hạng tổ — HK${k==1?"I":"II"} (${semData(k).ws.length} tuần đã chốt)`)}
+ const opt=(i)=>`<select style="padding:2px" onchange="S.team[${i}]=this.value;if(!this.value)delete S.team[${i}];save();draw()"><option value="">– Chưa có tổ</option>${TL().map(x=>`<option value="${x}" ${String(S.team[i])===String(x)?"selected":""}>${tname(x)}</option>`).join("")}</select>`;
+ const unl=NAMES.map((_,i)=>i).filter(i=>!S.team[i]);
+ if(unl.length)h+=`<div class="card"><b>Chưa có tổ (${unl.length})</b><table>${unl.map(i=>`<tr><td style="text-align:left">${i+1}. ${NAMES[i]}</td><td>${opt(i)}</td></tr>`).join("")}</table></div>`;
+ h+=`<div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">`+TL().map(t=>{const m=NAMES.map((_,i)=>i).filter(i=>String(S.team[i])===String(t));
+  const av=m.length?m.reduce((a,i)=>a+wv[i],0)/m.length:null;
+  return`<div class="wrap"><b style="font-size:15px">${tname(t)}</b> <span class="badge">${m.length} thành viên</span><span class="mu"> · TB tuần ${wk}: ${av===null?"–":f(av)}</span>`+
+  (m.length?`<table><tr><th>#</th><th>Họ và tên</th><th>Điểm</th><th>Hạng tổ</th><th></th></tr>`+m.map((i,k)=>`<tr><td>${k+1}</td><td>${NAMES[i]}${roleOf(i)?` <span class="mu" style="font-size:11px">· ${roleOf(i)}</span>`:""}</td><td>${f(wv[i])}</td><td>${1+m.filter(j=>wv[j]>wv[i]).length}</td><td>${opt(i)}</td></tr>`).join("")+`</table>`:`<div class="mu" style="padding:8px 0">Chưa có thành viên.</div>`)+`</div>`}).join("")+`</div>`;
+ return h}
+function autoTeam(){if(Object.keys(S.team).length&&!confirm("Chia lại sẽ ghi đè phân tổ hiện tại. Tiếp tục?"))return;S.team={};const n=TN();NAMES.forEach((_,i)=>S.team[i]=String(i%n+1));save();draw()}
+function dlTeam(){const wv=weekRows(wk).map(x=>x.tot);const L=["Phạm vi,Hạng,Tổ,Thành viên,Điểm TB tổ"];
+ const add=(lab,r)=>[...r].sort((a,b)=>(a.rk||99)-(b.rk||99)).forEach(x=>L.push([q(lab),x.rk||"",q(tname(x.t)),x.n,x.v===null?"":fc(x.v)].join(",")));
+ add("Tuần "+wk,teamAgg(wv));add("HKI",teamAgg(semData(1).rows.map(r=>r.avg)));add("HKII",teamAgg(semData(2).rows.map(r=>r.avg)));dl(`xep-hang-to-11A3.csv`,L)}
+const MUT=/addEv|delEv|setC\(|setCr|delCr|addCr|setAw|renLv|delLv|addLv|autoTeam|S\.team|S\.tn|S\.tname|S\.lock|setCut|setRole|renRole|delRole|addRole|addPt|delPt|S=\{|delete S/;
+let pend=false;
+function draw(){nav();$("app").innerHTML=iconify(({team:teamView,week:weekView,cttn:cttnView,sem:semView,review:reviewView,sum:sumView,pt:ptView,role:roleView,rule:ruleView})[tab]());animIn();
+ try{document.querySelectorAll("#app>.card").forEach(c=>{if(!c.querySelector("table")&&c.querySelector("button,select,input"))c.classList.add("panel")})}catch(e){}
+ if(RO)document.querySelectorAll("#app [onchange],#app [onclick]").forEach(el=>{if(MUT.test((el.getAttribute("onchange")||"")+(el.getAttribute("onclick")||"")))el.disabled=true})}
+function soft(){const a=document.activeElement;if(a&&/INPUT|SELECT/.test(a.tagName)&&a.closest&&a.closest("#app")){pend=true}else draw()}
+document.addEventListener("focusout",()=>{if(pend){pend=false;setTimeout(draw,150)}});
+const ST={local:"💾 Chỉ lưu trên máy này",sync:"⏳ Đang đồng bộ…",ok:"☁ Đã đồng bộ",ro:"👁 Chỉ xem",err:"⚠ Lỗi đồng bộ (dữ liệu vẫn lưu trên máy)"};
+let stk="local";function setSt(k){stk=k;const e=$("st");if(e)e.innerHTML=iconify(ST[k])}
+const sj=v=>JSON.stringify(v,(k,x)=>x&&typeof x==="object"&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);
+const cl=v=>JSON.parse(JSON.stringify(v));
+function docs(){const d={"app/config":{lock:S.lock||{},team:S.team||{},tn:S.tn||0,tname:S.tname||{},crit:(S.crit||[]).map(c=>({n:c[0],p:c[1],g:c[2]})),aw:S.aw||{},cut:S.cut||{},roles:S.roles||[],pt:S.pt||[]}};
+ WEEKS.forEach(w=>d["weeks/w"+w]={ev:S.ev.filter(e=>e.w===w).map(e=>({s:e.s,w:e.w,t:e.t,p:e.p,n:e.n,note:e.note||"",...(e.rid?{rid:e.rid}:{})}))});return d}
+function applyCfg(d){S.lock=cl(d.lock||{});S.team=cl(d.team||{});S.tn=d.tn||undefined;S.tname=cl(d.tname||{});
+ S.crit=d.crit&&d.crit.length?d.crit.map(c=>[c.n,c.p,c.g]):undefined;S.aw=d.aw&&Object.keys(d.aw).length?cl(d.aw):undefined;S.cut=d.cut&&d.cut.a?cl(d.cut):undefined;S.roles=d.roles&&d.roles.length?cl(d.roles):undefined;S.pt=d.pt?cl(d.pt):[]}
+function schedule(){if(!DB||RO)return;dirty=true;clearTimeout(timer);timer=setTimeout(flush,700);setSt("sync")}
+async function flush(){timer=null;if(busy){timer=setTimeout(flush,400);return}busy=true;
+ try{for(const[path,val]of Object.entries(docs())){const j=sj(val);if(last[path]===j)continue;if(last[path]===undefined&&path[0]==="w"&&!val.ev.length)continue;
+   const old=last[path];last[path]=j;try{await DB.doc(path).set(val)}catch(e){last[path]=old;throw e}}
+  dirty=!!timer;setSt(timer?"sync":"ok")}catch(e){dirty=false;setSt("err")}finally{busy=false}}
+const hasLocal=()=>S.ev.length||Object.keys(S.team||{}).length||Object.keys(S.lock||{}).length||S.crit||S.aw||(S.pt&&S.pt.length)||S.roles;
+async function initSync(){
+ try{DB=await claude.use("db")}catch(e){DB=null}
+ if(!DB){setSt("local");draw();return}
+ try{const u=await claude.use("user");if(u&&(await u.can("data.write"))===false)RO=true}catch(e){}
+ try{const c=await DB.doc("app/config").get();
+  if(!c.exists){if(hasLocal()&&!RO){last={};await flush()}}
+  else if(hasLocal()){try{localStorage.setItem("td11a3_backup",JSON.stringify(S))}catch(e){}}
+ }catch(e){setSt("err")}
+ DB.doc("app/config").onSnapshot(sn=>{if(!sn.exists||sn.metadata.hasPendingWrites||dirty)return;const d=sn.data(),j=sj(d);if(last["app/config"]===j)return;last["app/config"]=j;applyCfg(d);persist();soft()},()=>setSt("err"));
+ DB.collection("weeks").onSnapshot(sn=>{if(sn.metadata.hasPendingWrites||dirty)return;let ch=false;
+  sn.docs.forEach(x=>{const p="weeks/"+x.id,d=x.data(),j=sj(d);if(last[p]===j)return;last[p]=j;const w=+x.id.slice(1);S.ev=S.ev.filter(e=>e.w!==w).concat((d.ev||[]).map(e=>({...e})));ch=true});
+  if(ch){persist();soft()}},()=>setSt("err"));
+ setSt(RO?"ro":"ok");draw()}
+async function dlJson(){if(!DL)return;try{await DL.save({filename:`sao-luu-thi-dua-11A3-${new Date().toISOString().slice(0,10)}.json`,data:JSON.stringify({app:"thi-dua-11a3",version:1,exported:new Date().toISOString(),data:S},null,1)})}catch(e){if(e&&e.code!=="declined")alert("Không tải được: "+(e.message||e))}}
+function loadState(d){S={ev:(d.ev||[]).map(e=>({...e})),lock:d.lock||{},team:d.team||{},tn:d.tn,tname:d.tname,crit:d.crit,aw:d.aw,cut:d.cut,roles:d.roles,pt:d.pt||[]};save();draw()}
+function restoreFile(f){if(!f||RO)return;const r=new FileReader();r.onload=()=>{let d;try{const o=JSON.parse(r.result);d=o.data||o;if(!Array.isArray(d.ev))throw 0}catch(e){return alert("File sao lưu không hợp lệ.")}
+ if(confirm(`Khôi phục ${d.ev.length} sự kiện từ file? Dữ liệu hiện tại sẽ bị thay thế.`))loadState(d)};r.readAsText(f)}
+function restoreOld(){try{const d=JSON.parse(localStorage.getItem("td11a3_backup"));if(confirm("Thay dữ liệu hiện tại bằng dữ liệu cũ lưu trên máy này?"))loadState(d)}catch(e){alert("Không đọc được dữ liệu cũ.")}}
+// ===== Xuất Excel (.xlsx) =====
+const r2=x=>Math.round(x*100)/100,nm=i=>NAMES[i],tmn=i=>S.team[i]?tname(S.team[i]):"",hkn=h=>h==1?"I":h==2?"II":"cả năm";
+function shWeek(w){const R=weekRows(w);return["Tuần "+w,[["TỔNG KẾT THI ĐUA TUẦN "+w+" — CHI ĐOÀN 11A3"],[],["STT","Họ và tên","Tổ","Điểm chuẩn","Điểm trừ","Điểm cộng","Phong trào 1","Phong trào 2","Phong trào 3","Phong trào 4","Phong trào 5","CTTN","Tổng điểm","Xếp hạng"],...R.map((x,i)=>[i+1,nm(i),tmn(i),BASE,x.tr,x.cg,x.p1,x.p2,x.p3,x.p4,x.p5,x.ct,x.tot,x.rk])]]}
+function shCttn(h){const ws=WEEKS.filter(w=>sem(w)===h);return["CTTN HK"+hkn(h),[["CÔNG TRÌNH THANH NIÊN — HỌC KỲ "+hkn(h)],[],["STT","Họ và tên","Tổ",...ws.map(w=>"Tuần "+w),"Tổng"],...NAMES.map((n,i)=>{const v=ws.map(w=>{const e=S.ev.filter(e=>e.s===i&&e.w===w&&e.t==="cttn");return e.length?e.reduce((a,b)=>a+b.p,0):""});return[i+1,n,tmn(i),...v,v.reduce((a,b)=>a+(b||0),0)]})]]}
+function shSem(h){const{ws,rows}=semData(h),all=WEEKS.filter(w=>h===3||sem(w)===h),RV=reviewRows(h);return[h===3?"Tổng kết cả năm":"Tổng kết HK"+hkn(h),[[(h===3?"TỔNG KẾT THI ĐUA CẢ NĂM HỌC":"TỔNG KẾT THI ĐUA HỌC KỲ "+hkn(h))+" (đã chốt "+ws.length+"/"+all.length+" tuần)"],[],["STT","Họ và tên","Tổ",...all.map(w=>"Tuần "+w),"Tổng điểm",h===3?"Điểm TB cả năm":"Điểm TB học kỳ","Xếp hạng","Nhận xét"],...rows.map(r=>[r.i+1,nm(r.i),tmn(r.i),...r.sc.map(v=>v===null?"":v),r.sum,r.avg===null?"":r2(r.avg),r.avg===null?"":r.rk,RV[r.i].lv])]]}
+function shTeam(){const o=[["XẾP HẠNG THI ĐUA TỔ — CHI ĐOÀN 11A3"],[]],wv=weekRows(wk).map(x=>x.tot);
+ const blk=(t,a)=>{o.push([t],["Hạng","Tổ","Số thành viên","Điểm TB tổ"]);[...a].sort((x,y)=>(x.rk||99)-(y.rk||99)).forEach(x=>o.push([x.rk||"",tname(x.t),x.n,x.v===null?"":r2(x.v)]));o.push([])};
+ blk("Tuần "+wk,teamAgg(wv));blk("Học kỳ I",teamAgg(semData(1).rows.map(r=>r.avg)));blk("Học kỳ II",teamAgg(semData(2).rows.map(r=>r.avg)));
+ o.push(["THÀNH VIÊN TỪNG TỔ (điểm tuần "+wk+")"],["Tổ","STT","Họ và tên","Điểm tuần","Hạng trong tổ"]);
+ TL().forEach(t=>{const m=NAMES.map((_,i)=>i).filter(i=>String(S.team[i])===String(t));m.forEach((i,k)=>o.push([tname(t),k+1,nm(i),wv[i],1+m.filter(j=>wv[j]>wv[i]).length]))});
+ const un=NAMES.map((_,i)=>i).filter(i=>!S.team[i]);un.forEach((i,k)=>o.push(["Chưa có tổ",k+1,nm(i),wv[i],""]));return["Tổng kết tổ",o]}
+function shPersonal(){const a=semData(1),b=semData(2),n=a.ws.length+b.ws.length;
+ const yr=NAMES.map((_,i)=>n?(a.rows[i].sum+b.rows[i].sum)/n:null),yk=rank(yr.map(v=>v===null?-1e9:v));
+ const bd=NAMES.map(()=>({ht:0,kl:0,pt:0,ct:0}));S.ev.forEach(e=>{if(!S.lock[e.w])return;const x=bd[e.s];if(e.t==="ht")x.ht+=e.p;else if(e.t==="kl")x.kl+=e.p;else if(e.t==="cttn")x.ct+=e.p;else x.pt+=e.p});
+ return["Cá nhân",[["TỔNG KẾT CÁ NHÂN — CHI ĐOÀN 11A3 (chỉ tính các tuần đã chốt)"],[],["STT","Họ và tên","Tổ","Chức vụ","Tổng HKI","TB HKI","Hạng HKI","Tổng HKII","TB HKII","Hạng HKII","TB cả năm","Hạng cả năm","Điểm học tập","Điểm kỷ luật","Điểm phong trào","Điểm CTTN"],
+ ...NAMES.map((_,i)=>{const x=a.rows[i],y=b.rows[i];return[i+1,nm(i),tmn(i),roleOf(i),x.sum,x.avg===null?"":r2(x.avg),x.avg===null?"":x.rk,y.sum,y.avg===null?"":r2(y.avg),y.avg===null?"":y.rk,yr[i]===null?"":r2(yr[i]),yr[i]===null?"":yk[i],bd[i].ht,bd[i].kl,bd[i].pt,bd[i].ct]})]]}
+function shEvents(){const g={ht:"Học tập",kl:"Kỷ luật",cttn:"CTTN",pt1:"Phong trào 1",pt2:"Phong trào 2",pt3:"Phong trào 3",pt4:"Phong trào 4",pt5:"Phong trào 5"};
+ return["Chi tiết sự kiện",[["CHI TIẾT SỰ KIỆN CỘNG/TRỪ ĐIỂM"],[],["Tuần","Học kỳ","STT","Họ và tên","Tổ","Nhóm","Nội dung","Điểm","Ghi chú"],...[...S.ev].sort((x,y)=>x.w-y.w||x.s-y.s).map(e=>[e.w,"HK"+hkn(sem(e.w)),e.s+1,nm(e.s),tmn(e.s),g[e.t]||e.t,e.n,e.p,e.note||""])]]}
+const SH={sum:shSum,stats:shStats,pt1:()=>shPt(1),pt2:()=>shPt(2),pt3:()=>shPt(3),role:shRole,sem3:()=>shSem(3),review:shReview,week:()=>shWeek(wk),cttn1:()=>shCttn(1),cttn2:()=>shCttn(2),team:shTeam,personal:shPersonal,sem1:()=>shSem(1),sem2:()=>shSem(2),events:shEvents};
+function colw(a){const n=Math.max(...a.map(r=>r.length));return Array.from({length:n},(_,c)=>({wch:Math.min(42,Math.max(6,...a.filter(r=>r.length>1).map(r=>String(r[c]??"").length+2)))}))}
+async function xl(keys,file){if(typeof XLSX==="undefined")return alert("Chưa tải được thư viện Excel. Kiểm tra kết nối mạng rồi thử lại.");if(!DL)return alert("Môi trường này không hỗ trợ tải file.");
+ const wb=XLSX.utils.book_new();keys.forEach(k=>{const[n,a]=SH[k]();const ws=XLSX.utils.aoa_to_sheet(a);ws["!cols"]=colw(a);XLSX.utils.book_append_sheet(wb,ws,n.slice(0,31))});
+ try{await DL.save({filename:file,data:XLSX.write(wb,{bookType:"xlsx",type:"array"})})}catch(e){if(e&&e.code!=="declined")alert("Không tải được: "+(e.message||e))}}
+
+// ===== Nhận xét đoàn viên =====
+const LV=["Hoàn thành xuất sắc nhiệm vụ","Hoàn thành tốt nhiệm vụ","Hoàn thành nhiệm vụ"],CUT=()=>S.cut||{a:25,b:75};
+function setCut(k,v){const c={...CUT()};v=Math.round(+v);if(isNaN(v)||v<1||v>99)return draw();c[k]=v;if(c.a>=c.b){alert("Ngưỡng xuất sắc phải nhỏ hơn ngưỡng tốt.");return draw()}S.cut=c;save();draw()}
+function yearRows(){const a=semData(1),b=semData(2),n=a.ws.length+b.ws.length,avg=NAMES.map((_,i)=>n?(a.rows[i].sum+b.rows[i].sum)/n:null),rk=rank(avg.map(v=>v===null?-1e9:v));return avg.map((v,i)=>({i,avg:v,rk:v===null?null:rk[i],sum:a.rows[i].sum+b.rows[i].sum}))}
+function reviewRows(k){const r=k===3?yearRows():semData(k).rows.map(x=>({i:x.i,avg:x.avg,rk:x.avg===null?null:x.rk,sum:x.sum})),N=r.filter(x=>x.avg!==null).length,c=CUT();
+ r.forEach(x=>x.lv=x.avg===null?"":x.rk*100<=c.a*N?LV[0]:x.rk*100<=c.b*N?LV[1]:LV[2]);r.N=N;return r}
+function shReview(){const A=reviewRows(1),B=reviewRows(2),Y=reviewRows(3),c=CUT(),g=x=>[x.avg===null?"":r2(x.avg),x.rk??"",x.lv];
+ return["Nhận xét",[["NHẬN XÉT ĐOÀN VIÊN — CHI ĐOÀN 11A3 (top "+c.a+"%: xuất sắc; "+(c.a+1)+"%–"+c.b+"%: tốt; còn lại: hoàn thành nhiệm vụ)"],[],["STT","Họ và tên","Tổ","TB HKI","Hạng HKI","Nhận xét HKI","TB HKII","Hạng HKII","Nhận xét HKII","TB cả năm","Hạng cả năm","Nhận xét cả năm"],...NAMES.map((_,i)=>[i+1,nm(i),tmn(i),...g(A[i]),...g(B[i]),...g(Y[i])])]]}
+function reviewView(){const R=reviewRows(rv),c=CUT(),t=["Học kỳ I","Học kỳ II","Cả năm học"][rv-1],cnt=LV.map(l=>R.filter(x=>x.lv===l).length),col=[ "var(--pr)","var(--ok)","var(--mu)"];
+ const n=rv===3?semData(1).ws.length+semData(2).ws.length:semData(rv).ws.length;
+ let h=`<div class="card row">${[["Học kỳ I",1],["Học kỳ II",2],["Cả năm học",3]].map(([l,k])=>`<button class="b ${rv===k?"":"g"}" onclick="rv=${k};draw()">${l}</button>`).join("")}${DL?`<button class="b" onclick="xl(['review'],'nhan-xet-11A3.xlsx')">📗 Excel nhận xét</button>`:""}<span class="mu">Dựa trên điểm TB các tuần đã chốt (${n} tuần). Top ${c.a}%: xuất sắc · ${c.a+1}%–${c.b}%: tốt · còn lại: hoàn thành nhiệm vụ. Chỉnh ngưỡng ở tab Quy chế.</span></div>`;
+ h+=`<div class="stats">${LV.map((l,k)=>`<div>${l}<b style="color:${col[k]}">${cnt[k]}</b></div>`).join("")}<div>Có điểm / Tổng<b>${R.N}/${NAMES.length}</b></div></div>`;
+ h+=`<div class="card wrap"><b>Nhận xét đoàn viên — ${t}</b><table><tr><th>STT</th><th>Họ và tên</th><th>Tổ</th><th>Điểm TB</th><th>Hạng</th><th style="text-align:left">Nhận xét</th></tr>`+
+ [...R].sort((a,b)=>(a.rk||999)-(b.rk||999)||a.i-b.i).map(x=>`<tr><td>${x.i+1}</td><td>${NAMES[x.i]}</td><td>${tmn(x.i)||"–"}</td><td>${x.avg===null?"–":f(x.avg)}</td><td>${x.rk?`<span class="badge">${x.rk}</span>`:"–"}</td><td style="text-align:left">${x.lv?`<span class="badge" style="background:${col[LV.indexOf(x.lv)]}">${x.lv}</span>`:`<span class="mu">Chưa có điểm</span>`}</td></tr>`).join("")+`</table></div>`;return h}
+
+// ===== Thứ hạng, thống kê, biểu đồ =====
+const OR=R=>srt?R.map((_,i)=>i).sort((a,b)=>R[a].rk-R[b].rk||a-b):R.map((_,i)=>i);
+const SO=rows=>srt?[...rows].sort((a,b)=>(a.avg===null)-(b.avg===null)||(a.rk||99)-(b.rk||99)||a.i-b.i):rows;
+const scName=k=>k===0?"Tuần "+wk:k===1?"Học kỳ I":k===2?"Học kỳ II":"Cả năm học";
+function scoreVec(k){return k===0?weekRows(wk).map(x=>x.tot):k===3?yearRows().map(r=>r.avg):semData(k).rows.map(r=>r.avg)}
+function rankOf(v){const r=rank(v.map(x=>x===null?-1e9:x));return v.map((x,i)=>x===null?null:r[i])}
+function quant(a,q){const t=[...a].sort((x,y)=>x-y),p=(t.length-1)*q,l=Math.floor(p),h=Math.ceil(p);return t[l]+(t[h]-t[l])*(p-l)}
+function stats(v){const a=v.filter(x=>x!==null),n=a.length;if(!n)return null;const m=a.reduce((x,y)=>x+y,0)/n,sd=Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/n),fr={};
+ a.forEach(x=>{const k=r2(x);fr[k]=(fr[k]||0)+1});const mx=Math.max(...Object.values(fr)),q1=quant(a,.25),q2=quant(a,.5),q3=quant(a,.75);
+ return{n,m,q1,q2,q3,sd,iqr:q3-q1,mode:mx>1?Object.keys(fr).filter(k=>fr[k]===mx).map(Number).sort((x,y)=>x-y):[],max:Math.max(...a),min:Math.min(...a)}}
+const STR=[["Tổng số đoàn viên",()=>NAMES.length],["Số đoàn viên có điểm",s=>s.n],["Điểm trung bình (cả lớp)",s=>r2(s.m)],["Trung vị",s=>r2(s.q2)],["Tứ phân vị thứ nhất (Q1)",s=>r2(s.q1)],["Tứ phân vị thứ hai (Q2)",s=>r2(s.q2)],["Tứ phân vị thứ ba (Q3)",s=>r2(s.q3)],["Độ lệch chuẩn",s=>r2(s.sd)],["Khoảng tứ phân vị (IQR)",s=>r2(s.iqr)],["Mốt (Mod)",s=>s.mode.length?s.mode.map(x=>f(x)).join("; "):"Không có"],["Giá trị lớn nhất",s=>r2(s.max)],["Giá trị nhỏ nhất",s=>r2(s.min)]];
+function statTable(){const cols=[0,1,2,3].map(k=>stats(scoreVec(k)));return{cols,rows:STR.map(([l,fn])=>[l,...cols.map(c=>c?fn(c):"–")])}}
+function chartSvg(){const W=720,H=300,L=46,MR=16,T=14,B=34,pw=W-L-MR,ph=H-T-B;
+ const ws=WEEKS.filter(w=>(sc!==1||sem(w)===1)&&(sc!==2||sem(w)===2)&&(S.lock[w]||S.ev.some(e=>e.w===w)));
+ if(!ws.length)return'<p class="mu">Chưa có dữ liệu tuần để vẽ biểu đồ. Hãy nhập điểm hoặc chốt tuần.</p>';
+ const D=ws.map(w=>{const t=weekRows(w).map(x=>x.tot);return{w,a:t.reduce((x,y)=>x+y,0)/t.length,lo:Math.min(...t),hi:Math.max(...t),s:csel>=0?t[csel]:null}});
+ const all=D.flatMap(d=>[d.lo,d.hi]),lo=Math.floor(Math.min(...all)/10)*10-10,hi=lo+Math.max(20,Math.ceil((Math.max(...all)+10-lo)/20)*20);
+ const X=k=>L+(D.length===1?pw/2:pw*k/(D.length-1)),Y=v=>T+ph*(1-(v-lo)/(hi-lo));
+ let g="";for(let j=0;j<=4;j++){const v=lo+(hi-lo)*j/4;g+=`<line x1="${L}" x2="${W-MR}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--bd)"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--mu)">${Math.round(v)}</text>`}
+ const step=D.length>16?2:1;D.forEach((d,k)=>{if(k%step===0)g+=`<text x="${X(k)}" y="${H-12}" text-anchor="middle" font-size="10" fill="var(--mu)">T${d.w}</text>`});
+ const band=D.map((d,k)=>X(k)+","+Y(d.hi)).join(" ")+" "+[...D].map((d,k)=>[X(k),Y(d.lo)]).reverse().map(q=>q.join(",")).join(" ");
+ const line=(key,col,lab)=>`<polyline fill="none" stroke="${col}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" points="${D.map((d,k)=>X(k)+","+Y(d[key])).join(" ")}"/>`+D.map((d,k)=>`<circle cx="${X(k)}" cy="${Y(d[key])}" r="4" fill="#fff" stroke="${col}" stroke-width="2.4"><title>Tuần ${d.w} — ${lab}: ${f(d[key])}</title></circle>`).join("");
+ return`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="Biểu đồ điểm theo tuần">${g}<polygon points="${band}" fill="rgba(10,132,255,.13)"/>${line("a","var(--pr)","TB lớp")}${csel>=0?line("s","#ff9f0a",NAMES[csel]):""}</svg>`}
+function sumView(){const v=scoreVec(sc),rk=rankOf(v),N=v.filter(x=>x!==null).length,RVw=sc>0?reviewRows(sc):null,{rows}=statTable();
+ let h=`<div class="card row">${[["Tuần",0],["Học kỳ I",1],["Học kỳ II",2],["Cả năm học",3]].map(([l,k])=>`<button class="b ${sc===k?"":"g"}" onclick="sc=${k};draw()">${l}</button>`).join("")}${sc===0?`<button class="b g" onclick="wk=Math.max(5,wk-1);draw()">←</button><select onchange="wk=+this.value;draw()">${WEEKS.map(w=>`<option value="${w}" ${w===wk?"selected":""}>Tuần ${w}</option>`).join("")}</select><button class="b g" onclick="wk=Math.min(34,wk+1);draw()">→</button>`:""}${DL?`<button class="b" onclick="xl(['sum','stats'],'tong-ket-xep-hang-11A3.xlsx')">📗 Excel tổng kết</button>`:""}<span class="mu">Tự động xếp hạng từ cao xuống thấp · ${N}/${NAMES.length} đoàn viên có điểm${sc>0?" (các tuần đã chốt)":""}.</span></div>`;
+ h+=`<div class="card wrap"><b>Bảng xếp hạng — ${scName(sc)}</b><table><tr><th>Hạng</th><th>Họ và tên</th><th>Tổ</th><th style="text-align:left">Chức vụ</th><th>${sc===0?"Điểm tuần":"Điểm TB"}</th>${sc>0?'<th style="text-align:left">Nhận xét</th>':""}</tr>`+
+ NAMES.map((_,i)=>i).sort((a,b)=>(rk[a]===null)-(rk[b]===null)||rk[a]-rk[b]||a-b).map(i=>`<tr><td>${rk[i]===null?"–":rk[i]===1?"🥇":rk[i]===2?"🥈":rk[i]===3?"🥉":rk[i]}</td><td>${NAMES[i]}</td><td>${tmn(i)||"–"}</td><td style="text-align:left" class="mu">${roleOf(i)}</td><td><b>${v[i]===null?"–":f(v[i])}</b></td>${sc>0?`<td style="text-align:left">${RVw[i].lv||"–"}</td>`:""}</tr>`).join("")+`</table></div>`;
+ h+=`<div class="card wrap"><b>Bảng thống kê điểm</b><table><tr><th style="text-align:left">Chỉ số</th><th>Tuần ${wk}</th><th>Học kỳ I</th><th>Học kỳ II</th><th>Cả năm học</th></tr>`+rows.map(r=>`<tr><td style="text-align:left">${r[0]}</td>${r.slice(1).map(x=>`<td>${typeof x==="number"?f(x):String(x).length>26?`<span title="${ea(x)}">${ea(String(x).slice(0,24))}…</span>`:x}</td>`).join("")}</tr>`).join("")+`</table><p class="mu">Độ lệch chuẩn tính cho tổng thể lớp; tứ phân vị theo phương pháp nội suy (như QUARTILE.INC trong Excel). Học kỳ và cả năm chỉ tính các tuần đã chốt.</p></div>`;
+ h+=`<div class="card"><div class="row"><b>Biến động điểm theo tuần — ${sc===0||sc===3?"cả năm":scName(sc)}</b><select onchange="csel=+this.value;draw()"><option value="-1">Chỉ trung bình lớp</option>${NAMES.map((n,i)=>`<option value="${i}" ${csel===i?"selected":""}>So sánh: ${n}</option>`).join("")}</select></div><div class="row mu" style="margin:6px 0"><span><b style="color:var(--pr)">━</b> Điểm TB lớp</span><span><span style="display:inline-block;width:14px;height:10px;background:rgba(10,132,255,.2);border-radius:3px"></span> Khoảng thấp nhất – cao nhất</span>${csel>=0?`<span><b style="color:#ff9f0a">━</b> ${NAMES[csel]}</span>`:""}</div>${chartSvg()}</div>`;return h}
+function shSum(){const v=scoreVec(sc),rk=rankOf(v),RVw=sc>0?reviewRows(sc):null;
+ return["Xếp hạng "+(sc===0?"tuần "+wk:sc===1?"HKI":sc===2?"HKII":"cả năm"),[["BẢNG XẾP HẠNG — "+scName(sc).toUpperCase()+" — CHI ĐOÀN 11A3"],[],["Hạng","Họ và tên","Tổ","Chức vụ",sc===0?"Điểm tuần":"Điểm TB",...(sc>0?["Nhận xét"]:[])],...NAMES.map((_,i)=>i).sort((a,b)=>(rk[a]===null)-(rk[b]===null)||rk[a]-rk[b]||a-b).map(i=>[rk[i]??"",nm(i),tmn(i),roleOf(i),v[i]===null?"":r2(v[i]),...(sc>0?[RVw[i].lv]:[])])]]}
+function shStats(){const{rows}=statTable();return["Thống kê",[["BẢNG THỐNG KÊ ĐIỂM — CHI ĐOÀN 11A3"],[],["Chỉ số","Tuần "+wk,"Học kỳ I","Học kỳ II","Cả năm học"],...rows]]}
+// ===== Phong trào =====
+const AWS=()=>[...RK,"Không có giải"],hkOfW=w=>w<=17?1:2;
+function ptData(k){const recs=(S.pt||[]).filter(r=>k===3||hkOfW(r.w)===k),tot={};recs.forEach(r=>tot[r.s]=(tot[r.s]||0)+r.p);
+ const ids=Object.keys(tot).map(Number),rk=rank(ids.map(i=>tot[i])),rkOf={};ids.forEach((i,j)=>rkOf[i]=rk[j]);
+ return{ord:[...recs].sort((a,b)=>rkOf[a.s]-rkOf[b.s]||a.s-b.s||a.id-b.id),tot,rkOf}}
+function pdSet(k,v,r){pd[k]=v;if(r)draw()}
+function pdMem(i,c){pd.mem=c?[...new Set([...pd.mem,i])]:pd.mem.filter(x=>x!==i)}
+function pdAll(b){pd.mem=b?NAMES.map((_,i)=>i):[];draw()}
+function addPt(){const d=pd,w=d.w||wk,A=AWD(),lv=d.lv||Object.keys(A)[0],mem=d.k==="cn"?(d.m1>=0?[d.m1]:[]):d.mem;
+ if(!d.name.trim())return alert("Nhập tên cuộc thi.");if(!mem.length)return alert("Chọn đoàn viên tham gia.");if(S.lock[w])return alert("Tuần "+w+" đã chốt, không thể thêm. Bỏ chốt tuần hoặc chọn tuần khác.");
+ const p=d.aw==="Không có giải"?0:((A[lv]||[])[RK.indexOf(d.aw)]||0);S.pt=S.pt||[];let id=S.pt.reduce((a,r)=>Math.max(a,r.id),0);
+ mem.forEach(s=>{id++;S.pt.push({id,s,k:d.k,lv,name:d.name.trim(),aw:d.aw,w,p});if(p!==0)S.ev.push({s,w,t:d.col,p,n:d.aw+" cấp "+lv+": "+d.name.trim(),note:"Phong trào #"+id,rid:id})});
+ pd.name="";pd.mem=[];pd.m1=-1;save();draw()}
+function delPt(id){const r=(S.pt||[]).find(x=>x.id===id);if(!r)return;if(S.lock[r.w])return alert("Tuần "+r.w+" đã chốt, không thể xóa.");if(!confirm("Xóa bản ghi này? Điểm cộng tương ứng cũng bị xóa."))return;S.pt=S.pt.filter(x=>x.id!==id);S.ev=S.ev.filter(e=>e.rid!==id);save();draw()}
+function ptRows(k){const{ord,tot,rkOf}=ptData(k),o=ord.map(r=>[0,nm(r.s),r.k==="tt"?"Tập thể":"Cá nhân",r.lv,r.name,r.aw,r.p,tot[r.s],rkOf[r.s],r.id]);NAMES.forEach((n,i)=>{if(!(i in tot))o.push([0,n,null,null,null,null,null,null,null,null])});o.forEach((r,j)=>r[0]=j+1);return o}
+function shPt(k){const t=k===1?"HKI":k===2?"HKII":"cả năm";return["Phong trào "+t,[["PHONG TRÀO / CUỘC THI — "+t.toUpperCase()+" — CHI ĐOÀN 11A3"],[],["STT","Họ và tên","Cá nhân/Tập thể","Cấp","Tên cuộc thi","Giải đạt được","Điểm giải","Tổng điểm (cá nhân)","Xếp hạng"],...ptRows(k).map(r=>r.slice(0,9).map(x=>x===null?"":x))]]}
+function ptView(){const A=AWD(),lvs=Object.keys(A),d=pd,w0=d.w||wk,o=(v,x)=>v===x?"selected":"",rows=ptRows(ptsc);
+ let h=`<div class="card row">${[["Học kỳ I",1],["Học kỳ II",2],["Cả năm học",3]].map(([l,k])=>`<button class="b ${ptsc===k?"":"g"}" onclick="ptsc=${k};draw()">${l}</button>`).join("")}${DL?`<button class="b" onclick="xl(['pt'+ptsc],'phong-trao-11A3.xlsx')">📗 Excel phong trào</button>`:""}<span class="mu">${rows.filter(r=>r[9]!==null).length} lượt tham gia · tổng điểm phong trào ${f(rows.reduce((a,r)=>a+(r[6]||0),0))}. Đoàn viên chưa tham gia vẫn hiện trong danh sách. Xếp hạng theo tổng điểm phong trào của từng đoàn viên.</span></div>`;
+ if(!RO)h+=`<div class="card"><b>+ Ghi nhận phong trào / cuộc thi</b><div class="row" style="margin-top:8px"><select onchange="pdSet('k',this.value,1)"><option value="cn" ${o(d.k,"cn")}>Cá nhân</option><option value="tt" ${o(d.k,"tt")}>Tập thể</option></select>
+ <select onchange="pdSet('lv',this.value)">${lvs.map(l=>`<option ${o(d.lv||lvs[0],l)}>${ea(l)}</option>`).join("")}</select>
+ <input placeholder="Tên cuộc thi" value="${ea(d.name)}" oninput="pdSet('name',this.value)" style="min-width:230px">
+ <select onchange="pdSet('aw',this.value)">${AWS().map(a=>`<option ${o(d.aw,a)}>${a}</option>`).join("")}</select>
+ <select onchange="pdSet('w',+this.value)" title="Tuần ghi điểm">${WEEKS.map(w=>`<option value="${w}" ${w===w0?"selected":""}>Tuần ${w}</option>`).join("")}</select>
+ <select onchange="pdSet('col',this.value)" title="Tính vào cột">${[1,2,3,4,5].map(k=>`<option value="pt${k}" ${o(d.col,"pt"+k)}>→ PT${k}</option>`).join("")}</select></div>
+ <div style="margin-top:8px">${d.k==="cn"?`<select onchange="pdSet('m1',+this.value)"><option value="-1">– Chọn đoàn viên –</option>${NAMES.map((n,i)=>`<option value="${i}" ${d.m1===i?"selected":""}>${i+1}. ${n}</option>`).join("")}</select>`:
+ `<details open><summary>Chọn thành viên tham gia (${d.mem.length})</summary><div class="row" style="margin:6px 0"><button class="b g" onclick="pdAll(1)">Chọn cả lớp</button><button class="b g" onclick="pdAll(0)">Bỏ chọn</button></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px">${NAMES.map((n,i)=>`<label><input type="checkbox" ${d.mem.includes(i)?"checked":""} onchange="pdMem(${i},this.checked)"> ${i+1}. ${n}</label>`).join("")}</div></details>`}</div>
+ <div class="row" style="margin-top:8px"><button class="b" onclick="addPt()">Lưu</button><span class="mu">Điểm giải lấy từ bảng quy đổi ở tab Quy chế (mỗi thành viên được cộng điểm giải) và tự cộng vào cột PT của tuần đã chọn. “Không có giải” = 0 điểm.</span></div></div>`;
+ h+=`<div class="card wrap"><b>Danh sách phong trào — ${scName(ptsc)}</b><table><tr><th>STT</th><th>Họ và tên</th><th style="text-align:left">Cá nhân/Tập thể</th><th>Cấp</th><th style="text-align:left">Tên cuộc thi</th><th style="text-align:left">Giải đạt được</th><th>Điểm giải</th><th>Tổng điểm (cá nhân)</th><th>Xếp hạng</th>${RO?"":"<th></th>"}</tr>`+
+ rows.map(r=>{const e=r[9]===null,d=x=>e?'<span class="mu">–</span>':x;return`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="text-align:left">${d(r[2])}</td><td>${d(ea(r[3]))}</td><td style="text-align:left">${d(ea(r[4]))}</td><td style="text-align:left">${d(r[5])}</td><td class="${e?"":cls(r[6])}">${d(e?"":sg(r[6]))}</td><td>${d(e?"":`<b>${f(r[7])}</b>`)}</td><td>${d(e?"":`<span class="badge">${r[8]}</span>`)}</td>${RO?"":`<td>${e?"":`<button class="b g" onclick="delPt(${r[9]})">🗑</button>`}</td>`}</tr>`}).join("")+`</table></div>`;return h}
+// ===== Cán bộ lớp =====
+const DEFR=()=>{const o=["Lớp trưởng","Lớp phó học tập","Bí thư","Phó bí thư","Lớp phó Lao động","Lớp phó Phong trào","Lớp phó Văn Thể Mỹ","Lớp phó Kỷ luật"].map(n=>({n,s:-1}));for(let t=1;t<=4;t++)o.push({n:"Tổ trưởng Tổ "+t,s:-1});for(let t=1;t<=4;t++)o.push({n:"Tổ phó Tổ "+t,s:-1});return o};
+const RL=()=>S.roles||DEFR(),cloneR=()=>S.roles=S.roles||DEFR(),roleOf=i=>RL().filter(r=>r.s===i).map(r=>r.n).join(", ");
+function setRole(k,v){cloneR()[k].s=+v;save();draw()}
+function renRole(k,n){n=n.trim();if(!n)return draw();cloneR()[k].n=n;save();draw()}
+function delRole(k){if(!confirm("Xóa chức vụ này?"))return;cloneR().splice(k,1);save();draw()}
+function addRole(){const n=$("nrole").value.trim();if(!n)return alert("Nhập tên chức vụ.");cloneR().push({n,s:-1});save();draw()}
+function shRole(){return["Cán bộ lớp",[["BAN CÁN SỰ LỚP — CHI ĐOÀN 11A3"],[],["STT","Chức vụ","Họ và tên","Tổ"],...RL().map((r,k)=>[k+1,r.n,r.s>=0?nm(r.s):"(chưa bố trí)",r.s>=0?tmn(r.s):""])]]}
+function roleView(){const R=RL();
+ let h=`<div class="card row"><b>Ban cán sự lớp</b>${DL?`<button class="b" onclick="xl(['role'],'can-bo-lop-11A3.xlsx')">📗 Excel cán bộ lớp</button>`:""}<span class="mu">${RO?"":"Chọn đoàn viên cho từng chức vụ; sửa tên, thêm hoặc xóa chức vụ tùy ý. "}Một đoàn viên có thể giữ nhiều chức vụ.</span></div>`;
+ h+=`<div class="card wrap"><table><tr><th>STT</th><th style="text-align:left">Chức vụ</th><th style="text-align:left">Đoàn viên</th><th>Tổ</th>${RO?"":"<th></th>"}</tr>`+R.map((r,k)=>`<tr><td>${k+1}</td><td style="text-align:left">${RO?ea(r.n):`<input style="min-width:190px" value="${ea(r.n)}" onchange="renRole(${k},this.value)">`}</td><td style="text-align:left"><select onchange="setRole(${k},this.value)"><option value="-1">– Chưa bố trí –</option>${NAMES.map((n,i)=>`<option value="${i}" ${r.s===i?"selected":""}>${i+1}. ${n}</option>`).join("")}</select></td><td>${r.s>=0?tmn(r.s)||"–":""}</td>${RO?"":`<td><button class="b g" onclick="delRole(${k})">🗑</button></td>`}</tr>`).join("")+
+ (RO?"":`<tr><td></td><td style="text-align:left"><input id="nrole" placeholder="Chức vụ mới…" style="min-width:190px"></td><td style="text-align:left"><button class="b" onclick="addRole()">+ Thêm chức vụ</button></td><td></td><td></td></tr>`)+`</table>`+(RO?"":`<p><button class="b g" onclick="if(confirm('Khôi phục danh sách chức vụ mặc định? (Các bố trí hiện tại sẽ mất)')){delete S.roles;save();draw()}">Khôi phục mặc định</button></p>`)+`</div>`;return h}
+
+// ===== Hệ thống biểu tượng SVG (3D nhẹ) =====
+const GR={blue:["#7fd0ff","#0a6cff"],green:["#8bea9f","#0f9e4c"],orange:["#ffc874","#ff7a00"],purple:["#d1b0ff","#7c3aed"],pink:["#ffa6cc","#e11d74"],amber:["#ffe795","#f59e0b"],teal:["#72ecfa","#0891b2"],indigo:["#b0bcff","#4f46e5"],slate:["#b3cae6","#4b6f9f"],gold:["#fff2ad","#e0a100"],silver:["#fafcff","#9fb0c4"],bronze:["#ffd3a6","#b9692a"]};
+const GL={cal:'<rect x="3.5" y="5" width="17" height="15.5" rx="3.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+leaf:'<path d="M12 21v-9"/><path d="M12 13c0-4 3-6.5 7.5-6.5 0 4.2-3 6.5-7.5 6.5z"/><path d="M12 16c0-3.2-2.3-5-6-5 0 3.4 2.3 5 6 5z"/>',
+target:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/>',
+users:'<circle cx="9" cy="8.5" r="3.3"/><path d="M3 19.5c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.6a3 3 0 0 1 0 5.8M17.5 14.3c2.2.5 3.5 2.3 3.5 5.2"/>',
+star:'<path d="M12 3.2l2.7 5.5 6 .9-4.4 4.2 1 6-5.3-2.8-5.3 2.8 1-6L3.3 9.6l6-.9z"/>',
+trophy:'<path d="M8 4h8v5.5a4 4 0 0 1-8 0z"/><path d="M8 6.5H5v1.2A3.3 3.3 0 0 0 8.2 11M16 6.5h3v1.2A3.3 3.3 0 0 1 15.8 11M12 13.5V17M10 17h4M8.5 20.5h7"/>',
+bars:'<rect x="4" y="12" width="3.6" height="8.5" rx="1.2"/><rect x="10.2" y="6" width="3.6" height="14.5" rx="1.2"/><rect x="16.4" y="9" width="3.6" height="11.5" rx="1.2"/>',
+note:'<rect x="5" y="3.2" width="14" height="17.6" rx="3.2"/><path d="M9 8h6M9 12h6M9 16h3.5"/>',
+sliders:'<path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17" r="2"/>',
+sheet:'<rect x="4.5" y="4.5" width="15" height="15" rx="2.6"/><path d="M4.5 10h15M4.5 14.8h15M10 4.5v15"/>',
+download:'<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/>',upload:'<path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M5 19.5h14"/>',
+undo:'<path d="M9 7L4.5 11.5 9 16"/><path d="M4.5 11.5H15a4.5 4.5 0 0 1 0 9h-2"/>',left:'<path d="M14.5 6l-6 6 6 6"/>',right:'<path d="M9.5 6l6 6-6 6"/>',
+lock:'<rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+trash:'<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l.8 12.5h9.4L17.5 7M10 11v5M14 11v5"/>',
+pencil:'<path d="M4 20l1-4.5L16.5 4 20 7.5 8.5 19z"/><path d="M14.5 6l3.5 3.5"/>',
+sort:'<path d="M8 20V5M4.5 8.5L8 5l3.5 3.5M16 4v15M12.5 15.5L16 19l3.5-3.5"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+cloud:'<path d="M7 18.5a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 10.5a4 4 0 0 1-.5 8z"/>',
+disk:'<path d="M5 4.5h11l3.5 3.5V19a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M8 4.5v5h7v-5M8 20v-6h8v6"/>',
+clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+alert:'<path d="M12 4l9 15.5H3z"/><path d="M12 10v4.2M12 17h.01"/>'};
+const TC={cal:"blue",leaf:"green",target:"orange",users:"purple",star:"pink",trophy:"amber",bars:"teal",note:"indigo",sliders:"slate",sheet:"green"};
+const MD={m1:["gold","1","#7a4b00"],m2:["silver","2","#4a5b70"],m3:["bronze","3","#6b3510"]};
+function I(n,k){
+ if(MD[n]){const[g,t,c]=MD[n];return`<svg class="ic medal" viewBox="0 0 24 24" aria-label="Hạng ${t}"><path d="M8 2.5l3 6.8M16 2.5l-3 6.8" stroke="#4f9bff" stroke-width="3.2" stroke-linecap="round"/><circle cx="12" cy="15" r="7.2" fill="url(#g-${g})" stroke="rgba(0,0,0,.18)"/><ellipse cx="10.2" cy="11.6" rx="4" ry="2.1" fill="#fff" opacity=".45"/><text x="12" y="18.3" text-anchor="middle" font-size="9.5" font-weight="800" fill="${c}" font-family="system-ui,sans-serif">${t}</text></svg>`}
+ if(k==="tile"||TC[n]&&k==="t")return`<svg class="ic tile" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="9" fill="url(#g-${TC[n]||"blue"})"/><rect x="1" y="1" width="30" height="30" rx="9" fill="url(#g-sh)"/><path d="M1 12C1 5.9 5.9 1 12 1h8c6.1 0 11 4.9 11 11v1C24 16 8 16 1 13z" fill="url(#g-hl)"/><rect x="1.5" y="1.5" width="29" height="29" rx="8.5" fill="none" stroke="rgba(255,255,255,.6)"/><g transform="translate(4.8 4.8) scale(.9)" style="color:#fff" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${GL[n]||""}</g></svg>`;
+ return`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GL[n]||""}</svg>`}
+const IC={"📗":"sheet*","⬇":"download","⬆":"upload","↩":"undo","↕":"sort","🔒":"lock","🗑":"trash","✏":"pencil","✓":"check","💾":"disk","⏳":"clock","☁":"cloud","👁":"eye","⚠":"alert","🥇":"m1","🥈":"m2","🥉":"m3"};
+const EMO=/(?:📗|⬇|⬆|↩|↕|🔒|🗑|✏|✓|💾|⏳|☁|👁|⚠|🥇|🥈|🥉)\uFE0F?/g;
+function iconify(h){return h.replace(/>←<\/button>/g,">"+I("left")+"</button>").replace(/>→<\/button>/g,">"+I("right")+"</button>").replace(EMO,m=>{const n=IC[m.replace("\uFE0F","")];return n?n.endsWith("*")?I(n.slice(0,-1),"tile"):I(n):m})}
+try{const df=Object.entries(GR).map(([k,[a,b]])=>`<linearGradient id="g-${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`).join("")+`<linearGradient id="g-hl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="g-sh" x1="0" y1="0" x2="0" y2="1"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#001a4d" stop-opacity=".28"/></linearGradient>`;
+ document.body.insertAdjacentHTML("afterbegin",`<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${df}</defs></svg>`);$("logo").innerHTML=I("trophy","tile")}catch(e){}
+
+let lgT=0;
+function startApp(){const l=$("landing");if(l.classList.contains("out"))return;clearTimeout(lgT);const B=document.body;B.classList.remove("leave");B.classList.add("enter");l.classList.remove("back");l.classList.add("out");B.classList.remove("lock");window.scrollTo(0,0);
+ lgT=setTimeout(()=>{if(l.classList.contains("out"))l.style.display="none"},680);setTimeout(()=>B.classList.remove("enter"),1100)}
+function showLanding(){const l=$("landing"),B=document.body;if(!l.classList.contains("out"))return;clearTimeout(lgT);B.classList.remove("enter");B.classList.add("leave");
+ lgT=setTimeout(()=>{l.style.display="";void l.offsetWidth;l.classList.remove("out");l.classList.add("back");B.classList.add("lock");setTimeout(()=>{B.classList.remove("leave");l.classList.remove("back")},650)},300)}
+try{$("lglogo").innerHTML=I("trophy","tile");$("lgf1").innerHTML=I("trophy","tile");$("lgf2").innerHTML=I("bars","tile");$("lgf3").innerHTML=I("star","tile");$("lgf4").innerHTML=I("target","tile");
+ $("lgchips").innerHTML=[["cal","Thi đua tuần"],["leaf","CTTN"],["target","Phong trào"],["users","Thi đua tổ"],["bars","Thống kê"],["trophy","Xếp hạng"]].map(([i,t])=>`<span>${I(i)}${t}</span>`).join("");
+ $("lgarrow").innerHTML=I("right");$("startbtn").focus()}catch(e){}
+document.addEventListener("keydown",e=>{const l=$("landing");if(e.key==="Enter"&&l&&!l.classList.contains("out")&&l.style.display!=="none")startApp()});
+
+draw();
+initSync();
+</script></body></html>
